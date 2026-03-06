@@ -359,8 +359,7 @@ def generate_html_grid(scripts, settings):
                 <div class="script-content">
                     <div class="script-title" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         <a href="{script['preview_url']}" target="_blank" style="flex: 0 1 auto;">{script['name']}</a>
-                        <span class="script-extension" style="flex: 0 0 auto;">.sh</span>
-                        <a href="{script['preview_url']}" target="_blank" style="flex: 0 1 auto;">
+                        <a href="{script['edit_url']}" target="_blank" style="flex: 0 1 auto;">
                             <i class="fas fa-code"></i>
                         </a>
                     </div>
@@ -899,15 +898,6 @@ def generate_html_grid(scripts, settings):
                                     <i class="fas fa-clock" style="width: 16px; color: var(--github-text-secondary);"></i>
                                     <span>Modified: ${{script.last_modified.slice(0, 10)}}</span>
                                 </div>
-                            </div>
-                            
-                            <div class="script-actions">
-                                <a href="${{script.url}}" target="_blank" class="action-btn">
-                                    <i class="fas fa-download"></i> Raw
-                                </a>
-                                <a href="${{script.preview_url}}" target="_blank" class="action-btn primary">
-                                    <i class="fas fa-code"></i> Preview
-                                </a>
                             </div>
                         </div>
                     </div>
