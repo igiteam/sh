@@ -922,7 +922,7 @@ def generate_html_grid(scripts, settings):
                         </div>
                         <div class="script-content">
                             <div class="script-title" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                <a href="${{script.preview_url}}" target="_blank" style="flex: 0 1 auto;">{script['name']}</a>
+                                <a href="${{script.preview_url}}" target="_blank" style="flex: 0 1 auto;">{{script.name}}</a>
                                 <a href="${{script.edit_url}}" target="_blank" style="flex: 0 1 auto;">
                                     <i class="fas fa-code"></i>
                                 </a>
