@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <style>
         * {
             margin: 0;
@@ -32,55 +33,75 @@
             height: 100vh;
             overflow: auto;
             background: #1e1e1e;
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* Vertical icon toolbar */
-        .icon-toolbar {
+        /* Mobile-optimized horizontal toolbar */
+        .mobile-toolbar {
             position: fixed;
             top: 12px;
             right: 12px;
             z-index: 100;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #252526;
+            gap: 10px;
+            background: rgba(37, 37, 38, 0.9);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             border: 1px solid #3e3e42;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 6px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .icon-btn {
-            width: 36px;
-            height: 36px;
+        .mobile-btn {
+            width: 48px;
+            height: 48px;
             background: #2d2d30;
             color: #cccccc;
             border: 1px solid #3e3e42;
-            border-radius: 6px;
-            font-size: 18px;
+            border-radius: 10px;
+            font-size: 24px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .icon-btn:hover {
+        .mobile-btn:active {
             background: #3e3e42;
-            color: #ffffff;
-            transform: translateY(-1px);
+            transform: scale(0.95);
         }
 
-        .icon-btn.active {
+        .mobile-btn.active {
             background: #0e639c;
             color: white;
             border-color: #1177bb;
         }
 
+        .coffee-btn {
+            background: #2d2d30;
+            border: 1px solid #3e3e42;
+            border-radius: 10px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coffee-btn img {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+        }
+
         /* Right panel */
         .panel {
-            width: 400px;
+            width: 85vw;
+            max-width: 400px;
             height: 100vh;
             background: #252526;
             border-left: 1px solid #3e3e42;
@@ -96,32 +117,40 @@
         }
 
         .panel-header {
-            padding: 16px;
+            padding: 20px 16px;
             border-bottom: 1px solid #3e3e42;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: #cccccc;
             font-weight: 600;
+            font-size: 16px;
+        }
+
+        .panel-header .close-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
         }
 
         .panel-content {
             flex: 1;
-            padding: 16px;
+            padding: 20px 16px;
             overflow-y: auto;
             color: #cccccc;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.5;
+            -webkit-overflow-scrolling: touch;
         }
 
         .prompt-box {
             background: #1e1e1e;
             border: 1px solid #3e3e42;
-            border-radius: 6px;
+            border-radius: 10px;
             padding: 16px;
             margin-bottom: 20px;
             font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 12px;
+            font-size: 13px;
             white-space: pre-wrap;
             color: #9cdcfe;
         }
@@ -131,28 +160,32 @@
             height: 200px;
             background: #1e1e1e;
             border: 1px solid #3e3e42;
-            border-radius: 6px;
+            border-radius: 10px;
             color: #cccccc;
             padding: 12px;
             font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 12px;
+            font-size: 14px;
             resize: vertical;
-            margin: 10px 0;
+            margin: 15px 0;
         }
 
         .panel-btn {
             background: #0e639c;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 12px;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
-            margin: 5px 0;
+            margin: 8px 0;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .panel-btn:hover {
+        .panel-btn:active {
             background: #1177bb;
+            transform: scale(0.98);
         }
 
         @keyframes slideIn {
@@ -165,11 +198,11 @@
             }
         }
 
-        /* Script line styles */
+        /* Script line styles - optimized for mobile */
         .script-line {
             display: flex;
             font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.5;
             min-width: fit-content;
             width: 100%;
@@ -177,20 +210,22 @@
 
         .line-number {
             display: inline-block;
-            width: 48px;
-            padding: 0 8px 0 16px;
+            width: 45px;
+            padding: 0 6px 0 12px;
             color: #6e7681;
             text-align: right;
             user-select: none;
             border-right: 1px solid #404040;
-            margin-right: 16px;
+            margin-right: 12px;
             background: #1e1e1e;
             flex-shrink: 0;
+            font-size: 12px;
         }
 
         .line-content {
             flex: 1;
             white-space: pre;
+            font-size: 12px;
         }
 
         /* Highlight.js fixes */
@@ -244,6 +279,23 @@
         .hljs-variable {
             color: #9cdcfe !important;
         }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d2d30;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            z-index: 1000;
+            border: 1px solid #3e3e42;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+        }
     </style>
 </head>
 
@@ -253,17 +305,15 @@
         <div id="rightPanel" class="panel hidden"></div>
     </div>
 
-    <!-- Vertical icon toolbar -->
-    <!-- Floating icon toolbar - horizontal -->
-    <div style="position: fixed; top: 12px; right: 12px; z-index: 100; display: flex; gap: 8px;">
-        <a href="https://buymeacoffee.com/igiteam" target="_blank" class="icon-btn"
-            style="align-items: center; justify-content: center;">
+    <!-- Mobile-optimized horizontal toolbar -->
+    <div class="mobile-toolbar">
+        <a href="https://buymeacoffee.com/igiteam" target="_blank" class="coffee-btn">
             <img src="https://studio.buymeacoffee.com/assets/img/bmc-meta-new/new/apple-icon-120x120.png"
-                alt="Buy Me a Coffee" style="width: 18px; display: block; border-radius: 4;">
+                alt="Buy Me a Coffee">
         </a>
-        <button class="icon-btn" id="downloadBtn" title="Download script">⬇️</button>
-        <button class="icon-btn" id="copyBtn" title="Copy with line numbers">📋</button>
-        <button class="icon-btn" id="togglePanelBtn" title="Toggle AI panel">🤖</button>
+        <button class="mobile-btn" id="downloadBtn" title="Download script">⬇️</button>
+        <button class="mobile-btn" id="copyBtn" title="Copy with line numbers">📋</button>
+        <button class="mobile-btn" id="togglePanelBtn" title="Toggle AI panel">🤖</button>
     </div>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
@@ -290,19 +340,17 @@
             panel.innerHTML = `
                 <div class="panel-header">
                     <span>AI Assistant</span>
-                    <button class="icon-btn" onclick="togglePanel()" style="width: 28px; height: 28px;">✕</button>
+                    <button class="mobile-btn close-btn" onclick="togglePanel()">✕</button>
                 </div>
                 <div class="panel-content">
-                    <div class="prompt-box" id="aiPrompt">
-Loading...
-                    </div>
-                    <button class="panel-btn" onclick="copyPrompt()" style="width: 100%;">Copy Prompt</button>
+                    <div class="prompt-box" id="aiPrompt">Loading...</div>
+                    <button class="panel-btn" onclick="copyPrompt()">Copy Prompt</button>
                     
-                    <div style="margin: 20px 0 10px; color: #9cdcfe;">Apply AI Diff</div>
+                    <div style="margin: 25px 0 10px; color: #9cdcfe; font-weight: 500;">Apply AI Diff</div>
                     <textarea id="diffInput" class="diff-area" placeholder="Paste AI's diff response..."></textarea>
                     
-                    <button class="panel-btn" onclick="applyDiff()" style="width: 100%;">Apply Diff</button>
-                    <button class="panel-btn" onclick="downloadModified()" style="width: 100%; margin-top: 10px;">Download Modified</button>
+                    <button class="panel-btn" onclick="applyDiff()">Apply Diff</button>
+                    <button class="panel-btn" onclick="downloadModified()">Download Modified</button>
                 </div>
             `;
         }
@@ -331,7 +379,6 @@ Loading...
                 scriptText += `${lineNum.textContent.trim()} ${codeEl ? codeEl.textContent : lineContent.textContent}\n`;
             });
 
-            // Add the auto-instruction comment
             scriptText += `\n\n# === SH PREVIEW AUTO INSTRUCTION ===
 # This script was viewed in SH Preview (https://igiteam.github.io/sh)
 # When asking AI to modify this script:
@@ -382,31 +429,18 @@ Loading...
 
         function applyDiff() {
             const diffText = document.getElementById('diffInput').value;
-            showToast('✨ Diff received (apply logic here)');
+            showToast('✨ Diff received');
             console.log('Diff to apply:', diffText);
         }
 
         function downloadModified() {
-            // For now, just download original
             downloadScript();
         }
 
         function showToast(msg) {
             const toast = document.createElement('div');
+            toast.className = 'toast';
             toast.textContent = msg;
-            toast.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #2d2d30;
-                color: white;
-                padding: 8px 16px;
-                border-radius: 4px;
-                font-size: 12px;
-                z-index: 1000;
-                border: 1px solid #3e3e42;
-            `;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 2000);
         }
@@ -425,7 +459,6 @@ Loading...
                 const lines = data.replace(/\r\n/g, '\n').split('\n');
                 currentLineCount = lines.length;
 
-                // Update prompt with line count
                 if (enablePanel) {
                     const promptEl = document.getElementById('aiPrompt');
                     if (promptEl) {
@@ -440,7 +473,6 @@ The diff will be automatically applied by SH Preview.`;
                     }
                 }
 
-                // Create lines
                 lines.forEach((line, index) => {
                     const lineDiv = document.createElement('div');
                     lineDiv.className = 'script-line';
@@ -462,7 +494,6 @@ The diff will be automatically applied by SH Preview.`;
                     container.appendChild(lineDiv);
                 });
 
-                // Apply highlighting
                 document.querySelectorAll('code').forEach((block) => {
                     hljs.highlightElement(block);
                 });
@@ -472,7 +503,7 @@ The diff will be automatically applied by SH Preview.`;
                     '<div style="color: #f85149; padding: 20px;">❌ Error: ' + error.message + '</div>';
             });
 
-        // Event listeners for buttons
+        // Event listeners
         document.getElementById('downloadBtn').addEventListener('click', downloadScript);
         document.getElementById('copyBtn').addEventListener('click', copyScript);
         document.getElementById('togglePanelBtn').addEventListener('click', togglePanel);
