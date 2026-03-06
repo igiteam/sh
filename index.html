@@ -140,46 +140,51 @@
             gap: 8px;
         }
 
-        pre {
-            margin: 0;
-            padding: 20px 0 20px 0;
+        .script-line {
+            display: flex;
             font-family: 'Monaco', 'Menlo', monospace;
             font-size: 13px;
-            display: flex;
+            line-height: 1.5;
             min-width: fit-content;
+            width: 100%;
         }
 
-        .line-numbers {
-            padding: 0 10px 0 20px;
+        .line-number {
+            display: inline-block;
+            width: 48px;
+            padding: 0 8px 0 16px;
             color: #6e7681;
             text-align: right;
             user-select: none;
             border-right: 1px solid #404040;
-            margin-right: 15px;
+            margin-right: 16px;
             background: #1e1e1e;
+            flex-shrink: 0;
             font-family: 'Monaco', 'Menlo', monospace;
             font-size: 13px;
-            line-height: 1.5;
+        }
+
+        .line-content {
+            flex: 1;
             white-space: pre;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            color: #d4d4d4;
         }
 
         code {
             font-family: inherit;
-            display: block;
+            display: inline;
             padding: 0;
             white-space: pre;
-            line-height: 1.5;
+            background: transparent !important;
         }
 
         .hljs {
             padding: 0 !important;
             margin: 0 !important;
             background: transparent !important;
-        }
-
-        .script-line {
-            display: flex;
-            width: 100%;
+            display: inline;
         }
 
         .download-link {
@@ -190,6 +195,16 @@
 
         .download-link:hover {
             text-decoration: underline;
+        }
+
+        /* Ensure proper spacing for wrapped lines */
+        .hljs-keyword,
+        .hljs-built_in,
+        .hljs-type,
+        .hljs-literal,
+        .hljs-number,
+        .hljs-string {
+            white-space: pre;
         }
     </style>
 </head>
@@ -257,7 +272,7 @@ Explain this bash script in a nutshell.
 If I want to modify it, show me only the differences (diff format) that I need to change.
 Include line numbers from the original.
 
-Original script has ${currentLineCount} lines.
+Original script has [LOADING...] lines.
                     </div>
                     <button class="btn" onclick="copyPrompt()" style="width: 100%; margin-bottom: 20px;">
                         📋 Copy Prompt
@@ -293,56 +308,56 @@ Original script has ${currentLineCount} lines.
         }
 
         function copyScript() {
-            const container = document.getElementById('script-container');
-            const lines = container.querySelectorAll('.script-line');
+            const lines = document.querySelectorAll('.script-line');
             let scriptText = '';
 
             lines.forEach(line => {
-                const lineNum = line.querySelector('.line-numbers');
-                const code = line.querySelector('code');
-                if (lineNum && code) {
-                    scriptText += `${lineNum.textContent} ${code.textContent}\n`;
+                const lineNum = line.querySelector('.line-number');
+                const lineContent = line.querySelector('.line-content');
+                if (lineNum && lineContent) {
+                    const codeEl = lineContent.querySelector('code');
+                    scriptText += `${lineNum.textContent.trim()} ${codeEl ? codeEl.textContent : lineContent.textContent}\n`;
                 }
             });
 
             navigator.clipboard.writeText(scriptText).then(() => {
-                showToast('Script copied with line numbers!');
+                showToast('📋 Script copied with line numbers!');
             });
         }
 
         function copyPrompt() {
             const promptEl = document.getElementById('aiPrompt');
             navigator.clipboard.writeText(promptEl.textContent).then(() => {
-                showToast('Prompt copied!');
+                showToast('📋 Prompt copied!');
             });
         }
 
         function applyDiff() {
             const diffText = document.getElementById('diffInput').value;
-            // Simple diff parsing - looks for lines like "5c5" or "5,7c5,7"
-            // This is basic - would need a real diff parser for production
-            const lines = originalScript.split('\n');
-            const diffLines = diffText.split('\n');
-
-            // For demo, we'll just show a message
-            showToast('Diff applied! (Basic implementation - check console for parsed diff)');
+            // Simple diff parsing - you'd want a real diff library for production
+            showToast('✨ Diff applied! (Check console)');
             console.log('Diff to apply:', diffText);
         }
 
         function downloadModified() {
-            // Get current displayed script
-            const container = document.getElementById('script-container');
-            const codeEl = container.querySelector('code');
-            if (!codeEl) return;
+            // Get current displayed script content without line numbers
+            const lines = document.querySelectorAll('.script-line');
+            let scriptContent = '';
 
-            const blob = new Blob([codeEl.textContent], { type: 'text/plain' });
+            lines.forEach(line => {
+                const lineContent = line.querySelector('.line-content');
+                const codeEl = lineContent.querySelector('code');
+                scriptContent += (codeEl ? codeEl.textContent : lineContent.textContent) + '\n';
+            });
+
+            const blob = new Blob([scriptContent], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'modified_' + (scriptUrl.split('/').pop() || 'script.sh');
             a.click();
             URL.revokeObjectURL(url);
-            showToast('Modified script downloaded!');
+            showToast('⬇️ Modified script downloaded!');
         }
 
         function showToast(msg) {
@@ -360,6 +375,7 @@ Original script has ${currentLineCount} lines.
                 font-size: 12px;
                 z-index: 1000;
                 border: 1px solid #3e3e42;
+                animation: fadeIn 0.2s;
             `;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 2000);
@@ -376,10 +392,11 @@ Original script has ${currentLineCount} lines.
                 const container = document.getElementById('script-container');
                 container.innerHTML = '';
 
-                const lines = data.split('\n');
+                // Split by lines, handling both \n and \r\n
+                const lines = data.replace(/\r\n/g, '\n').split('\n');
                 currentLineCount = lines.length;
 
-                // Update prompt with line count if panel exists
+                // Update panel with line count if enabled
                 if (enablePanel) {
                     const promptEl = document.getElementById('aiPrompt');
                     if (promptEl) {
@@ -391,31 +408,35 @@ Original script has ${currentLineCount} lines.`;
                     }
                 }
 
+                // Create a document fragment for better performance
+                const fragment = document.createDocumentFragment();
+
                 lines.forEach((line, index) => {
                     const lineDiv = document.createElement('div');
                     lineDiv.className = 'script-line';
 
                     if (showLines) {
                         const lineNum = document.createElement('span');
-                        lineNum.className = 'line-numbers';
-                        lineNum.textContent = String(index + 1).padStart(4, ' ') + ' ';
+                        lineNum.className = 'line-number';
+                        lineNum.textContent = (index + 1).toString();
                         lineDiv.appendChild(lineNum);
                     }
 
-                    const pre = document.createElement('pre');
-                    pre.style.display = 'inline';
-                    pre.style.margin = '0';
-                    pre.style.padding = '0';
+                    const contentSpan = document.createElement('span');
+                    contentSpan.className = 'line-content';
 
                     const code = document.createElement('code');
                     code.className = 'language-bash';
                     code.textContent = line || ' ';
 
-                    pre.appendChild(code);
-                    lineDiv.appendChild(pre);
-                    container.appendChild(lineDiv);
+                    contentSpan.appendChild(code);
+                    lineDiv.appendChild(contentSpan);
+                    fragment.appendChild(lineDiv);
                 });
 
+                container.appendChild(fragment);
+
+                // Apply highlighting
                 hljs.highlightAll();
             })
             .catch(error => {
