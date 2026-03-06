@@ -21,12 +21,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Default configuration
-DEFAULT_USERNAME = "https://github.com/igiteam/sh"
+DEFAULT_USERNAME = "https://shbash.netlify.app/"
 # DEFAULT_USERNAME = "igiteam"
 # DEFAULT_AVATAR = "https://github.com/igiteam.png"
 # DEFAULT_GITHUB_URL = "https://igiteam.github.io/"
 DEFAULT_AVATAR = "https://cdn.sdappnet.cloud/rtx/images/bash.png"
-DEFAULT_GITHUB_URL = "https://shbash.netlify.app/"
+DEFAULT_GITHUB_URL = "https://github.com/igiteam/sh"
 OUTPUT_FILE = 'index.html'
 OUTPUT_DIRECTORY = 'public'
 SH_PREVIEW_URL = "https://igiteam.github.io/sh"
