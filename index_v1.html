@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1e1e1e;
+            height: 100vh;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .main-wrapper {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #script-container {
+            flex: 1;
+            height: 100vh;
+            overflow: auto;
+            background: #1e1e1e;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Floating icon toolbar - clean, no background */
+        .icon-toolbar {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 100;
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            min-height: 36px;
+            background: #2d2d30;
+            color: #cccccc;
+            border: 1px solid #3e3e42;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .icon-btn:hover {
+            background: #3e3e42;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
+        }
+
+        .icon-btn.active {
+            background: #0e639c;
+            color: white;
+            border-color: #1177bb;
+        }
+
+        /* iPhone SE (375px width and below) */
+        @media only screen and (max-width: 375px) and (max-height: 667px) {
+            .icon-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+
+            .icon-btn img {
+                width: 24px !important;
+                height: 24px !important;
+            }
+        }
+
+        /* Right panel */
+        .panel {
+            width: 85vw;
+            max-width: 400px;
+            height: 100vh;
+            background: #252526;
+            border-left: 1px solid #3e3e42;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 90;
+            animation: slideIn 0.2s ease;
+        }
+
+        .panel.hidden {
+            display: none;
+        }
+
+        .panel-header {
+            padding: 20px 16px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #cccccc;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .panel-content {
+            flex: 1;
+            padding: 20px 16px;
+            overflow-y: auto;
+            color: #cccccc;
+            font-size: 14px;
+            line-height: 1.5;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .prompt-box {
+            background: #1e1e1e;
+            border: 1px solid #3e3e42;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            color: #9cdcfe;
+        }
+
+        .diff-area {
+            width: 100%;
+            height: 200px;
+            background: #1e1e1e;
+            border: 1px solid #3e3e42;
+            border-radius: 10px;
+            color: #cccccc;
+            padding: 12px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            resize: vertical;
+            margin: 15px 0;
+        }
+
+        .panel-btn {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 8px 0;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .panel-btn:active {
+            background: #1177bb;
+            transform: scale(0.98);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* Script line styles */
+        .script-line {
+            display: flex;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            min-width: fit-content;
+            width: 100%;
+        }
+
+        .line-number {
+            display: inline-block;
+            width: 48px;
+            padding: 0 8px 0 16px;
+            color: #6e7681;
+            text-align: right;
+            user-select: none;
+            border-right: 1px solid #404040;
+            margin-right: 16px;
+            background: #1e1e1e;
+            flex-shrink: 0;
+        }
+
+        .line-content {
+            flex: 1;
+            white-space: pre;
+        }
+
+        /* Highlight.js fixes */
+        .hljs {
+            display: inline !important;
+            background: transparent !important;
+            padding: 0 !important;
+            color: #d4d4d4 !important;
+        }
+
+        .hljs-keyword {
+            color: #569cd6 !important;
+        }
+
+        .hljs-built_in {
+            color: #4ec9b0 !important;
+        }
+
+        .hljs-type {
+            color: #4ec9b0 !important;
+        }
+
+        .hljs-literal {
+            color: #569cd6 !important;
+        }
+
+        .hljs-number {
+            color: #b5cea8 !important;
+        }
+
+        .hljs-string {
+            color: #ce9178 !important;
+        }
+
+        .hljs-comment {
+            color: #6a9955 !important;
+        }
+
+        .hljs-function {
+            color: #dcdcaa !important;
+        }
+
+        .hljs-title {
+            color: #dcdcaa !important;
+        }
+
+        .hljs-params {
+            color: #9cdcfe !important;
+        }
+
+        .hljs-variable {
+            color: #9cdcfe !important;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d2d30;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            z-index: 1000;
+            border: 1px solid #3e3e42;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <div id="script-container"></div>
+        <div id="rightPanel" class="panel hidden"></div>
+    </div>
+
+    <!-- Floating icon toolbar - clean, top right -->
+    <div class="icon-toolbar">
+        <a href="https://buymeacoffee.com/igiteam" target="_blank" class="icon-btn" style="text-decoration: none;">
+            <img src="https://studio.buymeacoffee.com/assets/img/bmc-meta-new/new/apple-icon-120x120.png"
+                alt="Buy Me a Coffee" style="width: 18px; display: block; border-radius: 4px;">
+        </a>
+        <button class="icon-btn" id="downloadBtn" title="Download script">⬇️</button>
+        <button class="icon-btn" id="copyBtn" title="Copy with line numbers">📋</button>
+        <button class="icon-btn" id="togglePanelBtn" title="Toggle AI panel">🤖</button>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const scriptUrl = urlParams.get('url') || 'https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh';
+        const enablePanel = urlParams.get('e') === '1';
+
+        let currentLineCount = 0;
+        let originalScript = '';
+
+        if (enablePanel) {
+            initializePanel();
+        } else {
+            document.getElementById('togglePanelBtn').style.display = 'none';
+        }
+
+        function initializePanel() {
+            const panel = document.getElementById('rightPanel');
+            panel.innerHTML = `
+                <div class="panel-header">
+                    <span>AI Assistant</span>
+                    <button class="icon-btn" onclick="togglePanel()" style="width: 36px; height: 36px; font-size: 18px;">✕</button>
+                </div>
+                <div class="panel-content">
+                    <div class="prompt-box" id="aiPrompt">Loading...</div>
+                    <button class="panel-btn" onclick="copyPrompt()">Copy Prompt</button>
+                    
+                    <div style="margin: 25px 0 10px; color: #9cdcfe; font-weight: 500;">Apply AI Diff</div>
+                    <textarea id="diffInput" class="diff-area" placeholder="Paste AI's diff response..."></textarea>
+                    
+                    <button class="panel-btn" onclick="applyDiff()">Apply Diff</button>
+                    <button class="panel-btn" onclick="downloadModified()">Download Modified</button>
+                </div>
+            `;
+        }
+
+        function togglePanel() {
+            const panel = document.getElementById('rightPanel');
+            const toggleBtn = document.getElementById('togglePanelBtn');
+
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                toggleBtn.classList.add('active');
+            } else {
+                panel.classList.add('hidden');
+                toggleBtn.classList.remove('active');
+            }
+        }
+
+        function copyScript() {
+            const lines = document.querySelectorAll('.script-line');
+            let scriptText = '';
+
+            lines.forEach(line => {
+                const lineNum = line.querySelector('.line-number');
+                const lineContent = line.querySelector('.line-content');
+                const codeEl = lineContent.querySelector('code');
+                scriptText += `${lineNum.textContent.trim()} ${codeEl ? codeEl.textContent : lineContent.textContent}\n`;
+            });
+
+            scriptText += `\n\n# === SH PREVIEW AUTO INSTRUCTION ===
+# This script was viewed in SH Preview (https://igiteam.github.io/sh)
+# When asking AI to modify this script:
+# 1. Share only the DIFF (unified format) of changes needed
+# 2. Include line numbers from the original
+# 3. The diff should show exactly what to add/remove/modify
+# 4. Use format: @@ -start,count +start,count @@
+# 
+# Example diff format:
+# @@ -10,3 +10,4 @@
+#  # Original line
+# +New line after
+# -Line to remove
+# 
+# This allows the SH Preview tool to automatically apply your changes!`;
+
+            navigator.clipboard.writeText(scriptText).then(() => {
+                showToast('📋 Copied + AI instructions');
+            });
+        }
+
+        function downloadScript() {
+            const lines = document.querySelectorAll('.script-line');
+            let scriptContent = '';
+
+            lines.forEach(line => {
+                const lineContent = line.querySelector('.line-content');
+                const codeEl = lineContent.querySelector('code');
+                scriptContent += (codeEl ? codeEl.textContent : lineContent.textContent) + '\n';
+            });
+
+            const blob = new Blob([scriptContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = scriptUrl.split('/').pop() || 'script.sh';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('⬇️ Downloaded');
+        }
+
+        function copyPrompt() {
+            const promptEl = document.getElementById('aiPrompt');
+            navigator.clipboard.writeText(promptEl.textContent).then(() => {
+                showToast('📋 Prompt copied');
+            });
+        }
+
+        function applyDiff() {
+            const diffText = document.getElementById('diffInput').value;
+            showToast('✨ Diff received');
+            console.log('Diff to apply:', diffText);
+        }
+
+        function downloadModified() {
+            downloadScript();
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        // Load script
+        fetch(scriptUrl)
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.text();
+            })
+            .then(data => {
+                originalScript = data;
+                const container = document.getElementById('script-container');
+                container.innerHTML = '';
+
+                const lines = data.replace(/\r\n/g, '\n').split('\n');
+                currentLineCount = lines.length;
+
+                if (enablePanel) {
+                    const promptEl = document.getElementById('aiPrompt');
+                    if (promptEl) {
+                        promptEl.innerHTML = `Explain this bash script in a nutshell.
+If I want to modify it, show me only the differences (diff format).
+Include line numbers from the original.
+
+Original script has ${currentLineCount} lines.
+
+When you respond, ONLY output the diff in unified format.
+The diff will be automatically applied by SH Preview.`;
+                    }
+                }
+
+                lines.forEach((line, index) => {
+                    const lineDiv = document.createElement('div');
+                    lineDiv.className = 'script-line';
+
+                    const lineNum = document.createElement('span');
+                    lineNum.className = 'line-number';
+                    lineNum.textContent = (index + 1).toString();
+                    lineDiv.appendChild(lineNum);
+
+                    const contentSpan = document.createElement('span');
+                    contentSpan.className = 'line-content';
+
+                    const code = document.createElement('code');
+                    code.className = 'language-bash';
+                    code.textContent = line || ' ';
+
+                    contentSpan.appendChild(code);
+                    lineDiv.appendChild(contentSpan);
+                    container.appendChild(lineDiv);
+                });
+
+                document.querySelectorAll('code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+            })
+            .catch(error => {
+                document.getElementById('script-container').innerHTML =
+                    '<div style="color: #f85149; padding: 20px;">❌ Error: ' + error.message + '</div>';
+            });
+
+        document.getElementById('downloadBtn').addEventListener('click', downloadScript);
+        document.getElementById('copyBtn').addEventListener('click', copyScript);
+        document.getElementById('togglePanelBtn').addEventListener('click', togglePanel);
+    </script>
+</body>
+
+</html>
