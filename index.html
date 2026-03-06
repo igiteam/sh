@@ -705,7 +705,7 @@
         }
 
         // Set dynamic page title
-        document.title = scriptUrl ? `${scriptName}.sh` : 'SH Preview';
+        document.title = !urlParams.has('url') ? 'SH Preview' : `${scriptName}.sh`;
 
         // Update displays
         subdomainDisplay.textContent = `${scriptName}.yourdomain.com`;
