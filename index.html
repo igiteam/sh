@@ -1,484 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SH Preview · Elegant Bash Viewer</title>
+    <meta charset="utf-8">
+    <title>SH Preview</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-family: sans-serif;
             background: #0d1117;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
-        /* Header/Nav */
-        .header {
-            background: #161b22;
-            border-bottom: 1px solid #30363d;
-            padding: 1rem 2rem;
+        .toolbar {
+            margin-bottom: 10px;
             display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #e6edf3;
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .logo svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .url-form {
-            flex: 1;
-            display: flex;
-            gap: 0.5rem;
-            max-width: 900px;
+            gap: 10px;
         }
 
         .url-input {
             flex: 1;
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 0.6rem 1rem;
-            color: #e6edf3;
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 14px;
-        }
-
-        .url-input:focus {
-            outline: none;
-            border-color: #2f81f7;
-            box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.1);
+            padding: 8px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 4px;
         }
 
         .btn {
+            padding: 8px 16px;
             background: #238636;
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 0.6rem 1.5rem;
-            font-weight: 500;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
         }
 
         .btn:hover {
             background: #2ea043;
         }
 
-        .btn.secondary {
-            background: #21262d;
-            color: #c9d1d9;
-        }
-
-        .btn.secondary:hover {
-            background: #30363d;
-        }
-
-        /* Main content */
-        .main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem 2rem;
-            gap: 1rem;
-        }
-
-        .info-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #8b949e;
-            font-size: 13px;
-        }
-
-        .script-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .badge {
-            background: #1f6feb;
-            color: white;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .icon-btn {
-            background: none;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            color: #8b949e;
-            padding: 0.3rem 0.8rem;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: all 0.2s;
-        }
-
-        .icon-btn:hover {
-            background: #21262d;
-            color: #c9d1d9;
-        }
-
-        /* Script container */
-        .script-container {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            overflow: hidden;
-            flex: 1;
-            min-height: 500px;
-        }
-
-        #script-display {
+        #script-container {
             width: 100%;
-            height: 100%;
-            min-height: 500px;
-            max-height: 70vh;
-            overflow: auto;
-            background: #0d1117;
-            margin: 0;
-            padding: 1.5rem;
-        }
-
-        #script-display pre {
-            margin: 0;
-            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        #script-display code {
-            font-family: inherit;
-        }
-
-        /* Loading state */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             height: 500px;
-            color: #8b949e;
-            flex-direction: column;
-            gap: 1rem;
+            border: 1px solid #333;
+            border-radius: 4px;
+            overflow: auto;
+            background: #1e1e1e;
         }
 
-        .spinner {
-            border: 2px solid #30363d;
-            border-top-color: #2f81f7;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 0.8s linear infinite;
+        pre {
+            margin: 0;
+            padding: 20px;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Error state */
-        .error {
-            color: #f85149;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        /* Footer */
-        .footer {
-            border-top: 1px solid #30363d;
-            padding: 1rem 2rem;
-            color: #8b949e;
-            font-size: 12px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .footer a {
-            color: #2f81f7;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Examples dropdown */
-        .examples {
-            position: relative;
-            display: inline-block;
-        }
-
-        .examples-content {
-            display: none;
-            position: absolute;
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 0.5rem 0;
-            z-index: 1000;
-            min-width: 300px;
-            right: 0;
-        }
-
-        .examples:hover .examples-content {
-            display: block;
-        }
-
-        .example-item {
-            padding: 0.5rem 1rem;
-            color: #c9d1d9;
-            cursor: pointer;
-            font-family: 'SF Mono', monospace;
-            font-size: 12px;
-        }
-
-        .example-item:hover {
-            background: #21262d;
-        }
-
-        .example-desc {
-            color: #8b949e;
-            font-size: 11px;
-            margin-left: 0.5rem;
+        code {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
         }
     </style>
 </head>
 
 <body>
-    <header class="header">
-        <a href="/" class="logo">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" />
-            </svg>
-            <span>SH Preview</span>
-        </a>
+    <div class="toolbar">
+        <input type="text" id="urlInput" class="url-input"
+            placeholder="https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh"
+            value="https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh">
+        <button class="btn" onclick="loadScript()">Load</button>
+    </div>
+    <div id="script-container"></div>
 
-        <form id="urlForm" class="url-form" onsubmit="loadScript(); return false;">
-            <input type="url" id="scriptUrl" class="url-input" placeholder="" value="">
-            <button type="submit" class="btn">View Script</button>
-        </form>
-
-        <div class="examples">
-            <button class="btn secondary">Examples ▼</button>
-            <div class="examples-content">
-                <div class="example-item" onclick="loadExample('https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh')">
-                    urlpixelprint.sh <span class="example-desc">Printer setup script</span>
-                </div>
-                <div class="example-item"
-                    onclick="loadExample('https://raw.githubusercontent.com/nvm-sh/nvm/master/nvm.sh')">
-                    nvm.sh <span class="example-desc">Node Version Manager</span>
-                </div>
-                <div class="example-item" onclick="loadExample('https://get.docker.com/')">
-                    get-docker.sh <span class="example-desc">Docker install</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="main">
-        <div class="info-bar">
-            <div class="script-info">
-                <span id="currentFile">urlpixelprint.sh</span>
-                <span class="badge">Bash</span>
-            </div>
-            <div class="actions">
-                <button class="icon-btn" onclick="copyScript()">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path
-                            d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z">
-                        </path>
-                        <path
-                            d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z">
-                        </path>
-                    </svg>
-                    Copy
-                </button>
-                <button class="icon-btn" onclick="downloadScript()">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path
-                            d="M2.75 14h10.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5ZM8 10.94V1.97a.75.75 0 0 1 1.5 0v8.97l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 0 1 1.06-1.06L8 10.94Z">
-                        </path>
-                    </svg>
-                    Download
-                </button>
-            </div>
-        </div>
-
-        <div class="script-container">
-            <div id="script-display">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <div>Loading script...</div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <span>✨ Elegant Bash script viewer · SH Preview</span>
-        <span>Use: <code
-                style="background: #21262d; padding: 0.2rem 0.4rem; border-radius: 4px;">?url=your_script.sh</code></span>
-    </footer>
-
-    <!-- Highlight.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
 
     <script>
-        // Get URL parameter
-        function getUrlParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-
-        // Current script data
-        let currentScriptData = '';
-        let currentScriptUrl = '';
-
-        // Load script from URL
         function loadScript(url) {
-            const scriptUrl = url || document.getElementById('scriptUrl').value;
-            if (!scriptUrl) return;
+            const scriptUrl = url || document.getElementById('urlInput').value;
+            const container = document.getElementById('script-container');
 
-            currentScriptUrl = scriptUrl;
+            container.innerHTML = '<div style="color: #888; padding: 20px;">Loading...</div>';
 
-            // Update URL without reload
-            const newUrl = window.location.pathname + '?url=' + encodeURIComponent(scriptUrl);
-            window.history.pushState({ url: newUrl }, '', newUrl);
-
-            // Update filename display
-            const filename = scriptUrl.split('/').pop() || 'script.sh';
-            document.getElementById('currentFile').textContent = filename;
-
-            // Show loading
-            document.getElementById('script-display').innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <div>Loading script from ${filename}...</div>
-                </div>
-            `;
-
-            // Fetch and display script
             fetch(scriptUrl)
                 .then(response => {
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    if (!response.ok) throw new Error('Failed to load');
                     return response.text();
                 })
                 .then(data => {
-                    currentScriptData = data;
-                    displayScript(data);
+                    container.innerHTML = '';
+                    const pre = document.createElement('pre');
+                    const code = document.createElement('code');
+                    code.className = 'language-bash';
+                    code.textContent = data;
+                    pre.appendChild(code);
+                    container.appendChild(pre);
+                    hljs.highlightAll();
                 })
                 .catch(error => {
-                    document.getElementById('script-display').innerHTML = `
-                        <div class="error">
-                            <svg width="24" height="24" viewBox="0 0 16 16" fill="#f85149" style="margin-bottom: 1rem;">
-                                <path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53L4.47.22ZM6.5 4.75v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-1.5 0ZM8 11a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"></path>
-                            </svg>
-                            <h3>Error loading script</h3>
-                            <p style="color: #8b949e; margin-top: 0.5rem;">${error.message}</p>
-                            <p style="color: #6e7681; font-size: 12px; margin-top: 1rem;">${scriptUrl}</p>
-                        </div>
-                    `;
+                    container.innerHTML = '<div style="color: #f85149; padding: 20px;">Error: ' + error.message + '</div>';
                 });
         }
 
-        // Display script with syntax highlighting
-        function displayScript(content) {
-            const container = document.getElementById('script-display');
-            container.innerHTML = '';
-
-            const pre = document.createElement('pre');
-            const code = document.createElement('code');
-            code.className = 'language-bash';
-            code.textContent = content;
-            pre.appendChild(code);
-            container.appendChild(pre);
-
-            hljs.highlightAll();
-        }
-
-        // Load example
-        function loadExample(url) {
-            document.getElementById('scriptUrl').value = url;
-            loadScript(url);
-        }
-
-        // Copy script to clipboard
-        function copyScript() {
-            if (!currentScriptData) return;
-
-            navigator.clipboard.writeText(currentScriptData).then(() => {
-                alert('Script copied to clipboard!');
-            }).catch(() => {
-                alert('Failed to copy');
-            });
-        }
-
-        // Download script
-        function downloadScript() {
-            if (!currentScriptData || !currentScriptUrl) return;
-
-            const filename = currentScriptUrl.split('/').pop() || 'script.sh';
-            const blob = new Blob([currentScriptData], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = filename;
-            a.click();
-        }
-
-        // Initialize on page load
+        // Load from URL parameter if exists
         window.onload = function () {
-            const urlParam = getUrlParam('url');
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlParam = urlParams.get('url');
             if (urlParam) {
-                document.getElementById('scriptUrl').value = urlParam;
+                document.getElementById('urlInput').value = urlParam;
                 loadScript(urlParam);
             } else {
-                // Load default script
-                loadScript('https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh');
-            }
-        };
-
-        // Handle back/forward buttons
-        window.onpopstate = function () {
-            const urlParam = getUrlParam('url');
-            if (urlParam) {
-                document.getElementById('scriptUrl').value = urlParam;
-                loadScript(urlParam);
+                loadScript(); // Load default
             }
         };
     </script>
