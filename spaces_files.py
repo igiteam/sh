@@ -21,7 +21,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Default configuration
-DEFAULT_USERNAME = "igiteam"
+DEFAULT_USERNAME = "https://github.com/igiteam/sh"
+# DEFAULT_USERNAME = "igiteam"
 # DEFAULT_AVATAR = "https://github.com/igiteam.png"
 # DEFAULT_GITHUB_URL = "https://igiteam.github.io/"
 DEFAULT_AVATAR = "https://cdn.sdappnet.cloud/rtx/images/bash.png"
@@ -449,7 +450,7 @@ def generate_html_grid(scripts, settings):
         .user-avatar {{
             width: 40px;
             height: 40px;
-            border-radius: 50%;
+            border-radius: 4px;
             border: 1px solid var(--github-border);
         }}
         
