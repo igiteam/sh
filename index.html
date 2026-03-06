@@ -22,13 +22,23 @@
 
         pre {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            /* Removed padding */
             font-family: 'Monaco', 'Menlo', monospace;
             font-size: 13px;
         }
 
         code {
             font-family: inherit;
+            display: block;
+            padding: 0;
+            /* Ensure no padding */
+        }
+
+        .hljs {
+            padding: 0 !important;
+            /* Override any highlight.js padding */
+            margin: 0 !important;
         }
     </style>
 </head>
