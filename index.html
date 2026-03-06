@@ -832,19 +832,17 @@
                     <div class="prompt-box" id="aiPrompt">Loading...</div>
                     <button class="panel-btn" onclick="copyPrompt()">Copy Prompt</button>
                     
-                    <div style="margin: 25px 0 10px; color: #9cdcfe; font-weight: 500;">
-                        Apply AI Diff
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                        <a href="https://addons.mozilla.org/en-GB/firefox/addon/chatgpt-in-sidebar/" target="_blank" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none;">
-                            <img src="https://addons.mozilla.org/user-media/addon_icons/2824/2824957-64.png?modified=ccf4851f" width="16" height="16" style="border-radius: 4px;" alt="ChatGPT in Sidebar">
-                        </a>
-
-                        <a href="https://addons.mozilla.org/en-GB/firefox/addon/deepseek-in-sidebar/" target="_blank" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none;">
-                            <img src="https://addons.mozilla.org/user-media/addon_icons/2942/2942544-64.png?modified=94fdaa18" width="16" height="16" style="border-radius: 4px;" alt="DeepSeek in Sidebar">
-                        </a>
-                </div>
+                    <div style="margin: 25px 0 10px; display: flex; align-items: center; gap: 15px; color: #9cdcfe; font-weight: 500;">
+                        <span>Apply AI Diff</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <a href="https://addons.mozilla.org/en-GB/firefox/addon/chatgpt-in-sidebar/" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                                <img src="https://addons.mozilla.org/user-media/addon_icons/2824/2824957-64.png?modified=ccf4851f" width="16" height="16" style="border-radius: 4px;" alt="ChatGPT in Sidebar" title="ChatGPT in Sidebar">
+                            </a>
+                            <a href="https://addons.mozilla.org/en-GB/firefox/addon/deepseek-in-sidebar/" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                                <img src="https://addons.mozilla.org/user-media/addon_icons/2942/2942544-64.png?modified=94fdaa18" width="16" height="16" style="border-radius: 4px;" alt="DeepSeek in Sidebar" title="DeepSeek in Sidebar">
+                            </a>
+                        </div>
                     </div>
-
 
                     <textarea id="diffInput" class="diff-area" placeholder="Paste AI's diff response..."></textarea>
                     
