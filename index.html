@@ -420,21 +420,21 @@
         }
 
         function initArtalk() {
-            // Create page key from current URL
-            const pageKey = window.location.href;
-
-            artalkInstance = Artalk.init({
-                el: '#comments',
-                pageKey: pageKey,
-                pageTitle: document.title || 'SH Script',
-                server: 'https://artalk.sdappnet.cloud',
-                site: 'SH Preview',
-                placeholder: 'Leave a comment...',
-                noComment: 'No comments yet',
-                sendBtn: 'Send',
-                darkMode: true, // Match our dark theme
-                height: 'auto'
-            });
+            {
+                const pageKey = window.location.href;
+                artalkInstance = Artalk.init({
+                    el: '#comments',
+                    pageKey: pageKey,
+                    pageTitle: document.title || 'SH Script',
+                    server: 'https://artalk.sdappnet.cloud',
+                    site: 'SH Preview',
+                    placeholder: 'Leave a comment...',
+                    noComment: 'No comments yet',
+                    sendBtn: 'Send',
+                    darkMode: true,
+                    height: 'auto'
+                });
+            }
         }
 
         function initializePanel() {

@@ -404,7 +404,6 @@
             
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="Find a script..." id="scriptSearch">
-                <button class="purge-btn" id="purgeCacheBtn" title="Purge CDN cache"><i class="fas fa-bolt"></i> Purge</button>
             </div>
         </div>
         
@@ -1640,7 +1639,7 @@
         <!-- Footer -->
         <div class="footer">
             <p>📜 SH Scripts from DigitalOcean Spaces | CDN: https://cdn.sdappnet.cloud</p>
-            <p>Generated on 2026-03-06 17:35:57</p>
+            <p>Generated on 2026-03-06 17:56:34</p>
             <div class="cdn-info">
                 <i class="fas fa-bolt"></i> Files are cached for 1 hour. Use Purge button to instantly update.
             </div>
@@ -1804,11 +1803,6 @@
             filterScripts(e.target.value);
         });
         
-        // Setup purge button
-        const purgeBtn = document.getElementById('purgeCacheBtn');
-        if (purgeBtn) {
-            purgeBtn.addEventListener('click', purgeCache);
-        }
     </script>
 </body>
 </html>

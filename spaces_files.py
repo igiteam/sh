@@ -377,14 +377,6 @@ def generate_html_grid(scripts, settings):
                             <i class="fas fa-clock" style="width: 16px; color: var(--github-text-secondary);"></i>
                             <span>Modified: {script['last_modified'][:10]}</span>
                         </div>
-                        <script>
-                        Artalk.init({
-                        el:      '#Comments',
-                        site:    'Artalk Blog',
-                        server:  'https://artalk.sdappnet.cloud',
-                        pageKey: '{script['edit_url']}'
-                        })
-                        </sccript>
                     </div>
                 </div>
             </div>
@@ -801,7 +793,6 @@ def generate_html_grid(scripts, settings):
             
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="Find a script..." id="scriptSearch">
-                {'<button class="purge-btn" id="purgeCacheBtn" title="Purge CDN cache"><i class="fas fa-bolt"></i> Purge</button>' if settings.get('cdn_endpoint') else ''}
             </div>
         </div>
         
@@ -977,11 +968,6 @@ def generate_html_grid(scripts, settings):
             filterScripts(e.target.value);
         }});
         
-        // Setup purge button
-        const purgeBtn = document.getElementById('purgeCacheBtn');
-        if (purgeBtn) {{
-            purgeBtn.addEventListener('click', purgeCache);
-        }}
     </script>
 </body>
 </html>"""
