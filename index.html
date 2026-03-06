@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>SH Preview with Comments</title>
+    <title>ShBash with Comments</title>
 
     <link rel="icon" href="https://cdn.sdappnet.cloud/rtx/images/bash.png" type="image/png">
     <link rel="apple-touch-icon" href="https://cdn.sdappnet.cloud/rtx/images/bash.png" sizes="180x180">
@@ -596,13 +596,13 @@
     <div class="popup-overlay" id="appInfoPopupOverlay">
         <div class="popup-content" style="max-width: 450px;">
             <div class="popup-header">
-                <span>ℹ️ About SH Preview</span>
+                <span>ℹ️ About ShBash</span>
                 <button class="icon-btn" onclick="toggleAppInfoPopup()"
                     style="width: 32px; height: 32px; font-size: 16px;">✕</button>
             </div>
             <div class="popup-body">
                 <div class="popup-section">
-                    <h3>🎯 What is SH Preview?</h3>
+                    <h3>🎯 What is ShBash?</h3>
                     <p style="color: #cccccc; line-height: 1.6; margin-bottom: 15px;">
                         A powerful tool for viewing, sharing, and collaborating on shell scripts with built-in comments
                         and
@@ -879,7 +879,7 @@
                 pageKey: pageKey,
                 pageTitle: document.title || 'SH Script',
                 server: 'https://artalk.sdappnet.cloud',
-                site: 'SH Preview',
+                site: 'ShBash',
                 placeholder: 'Leave a comment...',
                 noComment: 'No comments yet',
                 sendBtn: 'Send',
@@ -1023,8 +1023,8 @@
                 scriptText += `${lineNum.textContent.trim()} ${codeEl ? codeEl.textContent : lineContent.textContent}\n`;
             });
 
-            scriptText += `\n\n# === SH PREVIEW AUTO INSTRUCTION ===
-# This script was viewed in SH Preview (https://igiteam.github.io/sh)
+            scriptText += `\n\n# === ShBash AUTO INSTRUCTION ===
+# This script was viewed in ShBash (https://igiteam.github.io/sh)
 # When asking AI to modify this script:
 # 1. Share only the DIFF (unified format) of changes needed
 # 2. Include line numbers from the original
@@ -1037,7 +1037,7 @@
 # +New line after
 # -Line to remove
 # 
-# This allows the SH Preview tool to automatically apply your changes!`;
+# This allows the ShBash tool to automatically apply your changes!`;
 
             navigator.clipboard.writeText(scriptText).then(() => {
                 showToast('📋 Copied + AI instructions');
@@ -1220,7 +1220,7 @@ Include line numbers from the original.
 Original script has ${currentLineCount} lines.
 
 When you respond, ONLY output the diff in unified format.
-The diff will be automatically applied by SH Preview.`;
+The diff will be automatically applied by ShBash.`;
                 }
             }
 
