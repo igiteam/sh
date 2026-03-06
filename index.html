@@ -3,71 +3,37 @@
 
 <head>
     <meta charset="utf-8">
-    <title>SH Preview</title>
     <style>
         body {
             margin: 0;
-            padding: 20px;
-            font-family: sans-serif;
-            background: #0d1117;
-        }
-
-        .toolbar {
-            margin-bottom: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .url-input {
-            flex: 1;
-            padding: 8px;
+            padding: 0;
             background: #1e1e1e;
-            border: 1px solid #333;
-            color: #fff;
-            border-radius: 4px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            background: #238636;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: #2ea043;
+            height: 100vh;
+            overflow: hidden;
         }
 
         #script-container {
-            width: 100%;
-            height: 500px;
-            border: 1px solid #333;
-            border-radius: 4px;
+            width: 100vw;
+            height: 100vh;
             overflow: auto;
             background: #1e1e1e;
+            box-sizing: border-box;
         }
 
         pre {
             margin: 0;
             padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
         }
 
         code {
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 13px;
+            font-family: inherit;
         }
     </style>
 </head>
 
 <body>
-    <div class="toolbar">
-        <input type="text" id="urlInput" class="url-input"
-            placeholder="https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh"
-            value="https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh">
-        <button class="btn" onclick="loadScript()">Load</button>
-    </div>
     <div id="script-container"></div>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
@@ -75,43 +41,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
 
     <script>
-        function loadScript(url) {
-            const scriptUrl = url || document.getElementById('urlInput').value;
-            const container = document.getElementById('script-container');
+        const urlParams = new URLSearchParams(window.location.search);
+        const scriptUrl = urlParams.get('url') || 'https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh';
 
-            container.innerHTML = '<div style="color: #888; padding: 20px;">Loading...</div>';
-
-            fetch(scriptUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error('Failed to load');
-                    return response.text();
-                })
-                .then(data => {
-                    container.innerHTML = '';
-                    const pre = document.createElement('pre');
-                    const code = document.createElement('code');
-                    code.className = 'language-bash';
-                    code.textContent = data;
-                    pre.appendChild(code);
-                    container.appendChild(pre);
-                    hljs.highlightAll();
-                })
-                .catch(error => {
-                    container.innerHTML = '<div style="color: #f85149; padding: 20px;">Error: ' + error.message + '</div>';
-                });
-        }
-
-        // Load from URL parameter if exists
-        window.onload = function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlParam = urlParams.get('url');
-            if (urlParam) {
-                document.getElementById('urlInput').value = urlParam;
-                loadScript(urlParam);
-            } else {
-                loadScript(); // Load default
-            }
-        };
+        fetch(scriptUrl)
+            .then(response => response.text())
+            .then(data => {
+                const container = document.getElementById('script-container');
+                const pre = document.createElement('pre');
+                const code = document.createElement('code');
+                code.className = 'language-bash';
+                code.textContent = data;
+                pre.appendChild(code);
+                container.appendChild(pre);
+                hljs.highlightAll();
+            })
+            .catch(error => {
+                document.getElementById('script-container').innerHTML =
+                    '<div style="color: #f85149; padding: 20px;">Error: ' + error.message + '</div>';
+            });
     </script>
 </body>
 
