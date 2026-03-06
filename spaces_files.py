@@ -806,8 +806,8 @@ def generate_html_grid(scripts, settings):
                 </select>
 
                 <!-- Upload button -->
-                <button class="upload-btn" id="uploadBtn" title="Upload new script" style="background: var(--github-primary); border: 1px solid var(--github-primary); border-radius: 6px; padding: 10px 16px; cursor: pointer; color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(9, 105, 218, 0.2);">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 16px;"></i>
+                <button class="upload-btn" id="uploadBtn" title="Upload new script" style="background: transparent; border: 1px solid var(--github-primary); border-radius: 6px; padding: 10px 16px; cursor: pointer; color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                ⬆️
                 </button>
             </div>
         </div>
