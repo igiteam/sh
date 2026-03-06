@@ -16,128 +16,14 @@
             background: #1e1e1e;
             height: 100vh;
             overflow: hidden;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        .main-wrapper {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
         }
 
         #script-container {
-            flex: 1;
+            width: 100vw;
             height: 100vh;
             overflow: auto;
             background: #1e1e1e;
             position: relative;
-        }
-
-        .panel {
-            width: 400px;
-            height: 100vh;
-            background: #252526;
-            border-left: 1px solid #3e3e42;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease;
-            position: relative;
-            z-index: 90;
-        }
-
-        .panel.collapsed {
-            display: none;
-        }
-
-        .panel-header {
-            padding: 16px;
-            border-bottom: 1px solid #3e3e42;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #cccccc;
-            font-weight: 600;
-        }
-
-        .panel-content {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-            color: #cccccc;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .prompt-box {
-            background: #1e1e1e;
-            border: 1px solid #3e3e42;
-            border-radius: 6px;
-            padding: 16px;
-            margin-bottom: 20px;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 12px;
-            white-space: pre-wrap;
-            color: #9cdcfe;
-        }
-
-        .diff-area {
-            width: 100%;
-            height: 200px;
-            background: #1e1e1e;
-            border: 1px solid #3e3e42;
-            border-radius: 6px;
-            color: #cccccc;
-            padding: 12px;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 12px;
-            resize: vertical;
-            margin: 10px 0;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            background: #0e639c;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.2s;
-        }
-
-        .btn:hover {
-            background: #1177bb;
-        }
-
-        .btn.icon-btn {
-            padding: 8px;
-            background: #2d2d30;
-        }
-
-        .btn.icon-btn:hover {
-            background: #3e3e42;
-        }
-
-        .floating-controls {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            z-index: 100;
-            display: flex;
-            gap: 8px;
         }
 
         .script-line {
@@ -160,15 +46,11 @@
             margin-right: 16px;
             background: #1e1e1e;
             flex-shrink: 0;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 13px;
         }
 
         .line-content {
             flex: 1;
             white-space: pre;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 13px;
             color: #d4d4d4;
         }
 
@@ -187,33 +69,37 @@
             display: inline;
         }
 
-        .download-link {
-            color: #9cdcfe;
-            text-decoration: none;
-            font-weight: 500;
+        /* Hidden download button - only appears if showDownload=1 */
+        .download-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2d2d30;
+            color: #cccccc;
+            border: 1px solid #404040;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 100;
+            display: none;
         }
 
-        .download-link:hover {
-            text-decoration: underline;
+        .download-btn:hover {
+            background: #3e3e42;
         }
 
-        /* Ensure proper spacing for wrapped lines */
-        .hljs-keyword,
-        .hljs-built_in,
-        .hljs-type,
-        .hljs-literal,
-        .hljs-number,
-        .hljs-string {
-            white-space: pre;
+        .download-btn.visible {
+            display: block;
         }
     </style>
 </head>
 
 <body>
-    <div class="main-wrapper">
-        <div id="script-container"></div>
-        <div id="rightPanel" class="panel"></div>
-    </div>
+    <div id="script-container"></div>
+
+    <!-- Hidden download button (only shows when showDownload=1) -->
+    <button id="downloadBtn" class="download-btn" onclick="downloadScript()">⬇️ Download .sh</button>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -223,123 +109,14 @@
         // Parse URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const scriptUrl = urlParams.get('url') || 'https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh';
-        const showLines = urlParams.get('lines') !== 'false'; // default true
-        const enablePanel = urlParams.get('e') === '1';
+        const showDownload = urlParams.get('download') === '1'; // Hidden unless &download=1
 
-        let originalScript = '';
-        let currentLineCount = 0;
-
-        // Create floating controls
-        const controls = document.createElement('div');
-        controls.className = 'floating-controls';
-
-        // Copy button
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'btn icon-btn';
-        copyBtn.innerHTML = '📋';
-        copyBtn.title = 'Copy script with line numbers';
-        copyBtn.onclick = copyScript;
-
-        // Panel toggle button (only if panel enabled)
-        if (enablePanel) {
-            const panelToggle = document.createElement('button');
-            panelToggle.className = 'btn icon-btn';
-            panelToggle.innerHTML = '🤖';
-            panelToggle.title = 'Toggle AI panel';
-            panelToggle.onclick = togglePanel;
-            controls.appendChild(panelToggle);
+        // Show download button if requested
+        if (showDownload) {
+            document.getElementById('downloadBtn').classList.add('visible');
         }
 
-        controls.appendChild(copyBtn);
-        document.body.appendChild(controls);
-
-        // Initialize panel if enabled
-        if (enablePanel) {
-            initializePanel();
-        }
-
-        function initializePanel() {
-            const panel = document.getElementById('rightPanel');
-            panel.innerHTML = `
-                <div class="panel-header">
-                    <span>🤖 AI Assistant</span>
-                    <button class="btn icon-btn" onclick="togglePanel()" style="padding: 4px 8px;">✕</button>
-                </div>
-                <div class="panel-content">
-                    <div style="margin-bottom: 16px; color: #9cdcfe; font-weight: 500;">📋 AI Prompt Template</div>
-                    <div class="prompt-box" id="aiPrompt">
-Explain this bash script in a nutshell. 
-If I want to modify it, show me only the differences (diff format) that I need to change.
-Include line numbers from the original.
-
-Original script has [LOADING...] lines.
-                    </div>
-                    <button class="btn" onclick="copyPrompt()" style="width: 100%; margin-bottom: 20px;">
-                        📋 Copy Prompt
-                    </button>
-
-                    <div style="margin-bottom: 16px; color: #9cdcfe; font-weight: 500;">🔄 Apply AI Diff</div>
-                    <textarea id="diffInput" class="diff-area" placeholder="Paste AI's diff response here..."></textarea>
-                    
-                    <div class="btn-group">
-                        <button class="btn" onclick="applyDiff()">✨ Apply Diff</button>
-                        <button class="btn" onclick="downloadModified()">⬇️ Download Modified</button>
-                    </div>
-                    
-                    <div style="margin-top: 20px; font-size: 11px; color: #6e7681;">
-                        <strong>How to use:</strong><br>
-                        1. Click "Copy Prompt"<br>
-                        2. Paste to ChatGPT/DeepSeek<br>
-                        3. Copy AI's diff response<br>
-                        4. Paste above and click "Apply Diff"<br>
-                        5. Download your modified script
-                    </div>
-                </div>
-            `;
-        }
-
-        function togglePanel() {
-            const panel = document.getElementById('rightPanel');
-            if (panel.style.display === 'none') {
-                panel.style.display = 'flex';
-            } else {
-                panel.style.display = 'none';
-            }
-        }
-
-        function copyScript() {
-            const lines = document.querySelectorAll('.script-line');
-            let scriptText = '';
-
-            lines.forEach(line => {
-                const lineNum = line.querySelector('.line-number');
-                const lineContent = line.querySelector('.line-content');
-                if (lineNum && lineContent) {
-                    const codeEl = lineContent.querySelector('code');
-                    scriptText += `${lineNum.textContent.trim()} ${codeEl ? codeEl.textContent : lineContent.textContent}\n`;
-                }
-            });
-
-            navigator.clipboard.writeText(scriptText).then(() => {
-                showToast('📋 Script copied with line numbers!');
-            });
-        }
-
-        function copyPrompt() {
-            const promptEl = document.getElementById('aiPrompt');
-            navigator.clipboard.writeText(promptEl.textContent).then(() => {
-                showToast('📋 Prompt copied!');
-            });
-        }
-
-        function applyDiff() {
-            const diffText = document.getElementById('diffInput').value;
-            // Simple diff parsing - you'd want a real diff library for production
-            showToast('✨ Diff applied! (Check console)');
-            console.log('Diff to apply:', diffText);
-        }
-
-        function downloadModified() {
+        function downloadScript() {
             // Get current displayed script content without line numbers
             const lines = document.querySelectorAll('.script-line');
             let scriptContent = '';
@@ -354,31 +131,9 @@ Original script has [LOADING...] lines.
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'modified_' + (scriptUrl.split('/').pop() || 'script.sh');
+            a.download = scriptUrl.split('/').pop() || 'script.sh';
             a.click();
             URL.revokeObjectURL(url);
-            showToast('⬇️ Modified script downloaded!');
-        }
-
-        function showToast(msg) {
-            const toast = document.createElement('div');
-            toast.textContent = msg;
-            toast.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #2d2d30;
-                color: white;
-                padding: 8px 16px;
-                border-radius: 4px;
-                font-size: 12px;
-                z-index: 1000;
-                border: 1px solid #3e3e42;
-                animation: fadeIn 0.2s;
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2000);
         }
 
         // Load and display script
@@ -388,40 +143,24 @@ Original script has [LOADING...] lines.
                 return response.text();
             })
             .then(data => {
-                originalScript = data;
                 const container = document.getElementById('script-container');
                 container.innerHTML = '';
 
-                // Split by lines, handling both \n and \r\n
+                // Split into lines
                 const lines = data.replace(/\r\n/g, '\n').split('\n');
-                currentLineCount = lines.length;
 
-                // Update panel with line count if enabled
-                if (enablePanel) {
-                    const promptEl = document.getElementById('aiPrompt');
-                    if (promptEl) {
-                        promptEl.innerHTML = `Explain this bash script in a nutshell. 
-If I want to modify it, show me only the differences (diff format) that I need to change.
-Include line numbers from the original.
-
-Original script has ${currentLineCount} lines.`;
-                    }
-                }
-
-                // Create a document fragment for better performance
-                const fragment = document.createDocumentFragment();
-
+                // Create lines with numbers
                 lines.forEach((line, index) => {
                     const lineDiv = document.createElement('div');
                     lineDiv.className = 'script-line';
 
-                    if (showLines) {
-                        const lineNum = document.createElement('span');
-                        lineNum.className = 'line-number';
-                        lineNum.textContent = (index + 1).toString();
-                        lineDiv.appendChild(lineNum);
-                    }
+                    // Line number
+                    const lineNum = document.createElement('span');
+                    lineNum.className = 'line-number';
+                    lineNum.textContent = (index + 1).toString();
+                    lineDiv.appendChild(lineNum);
 
+                    // Line content with syntax highlighting
                     const contentSpan = document.createElement('span');
                     contentSpan.className = 'line-content';
 
@@ -431,10 +170,8 @@ Original script has ${currentLineCount} lines.`;
 
                     contentSpan.appendChild(code);
                     lineDiv.appendChild(contentSpan);
-                    fragment.appendChild(lineDiv);
+                    container.appendChild(lineDiv);
                 });
-
-                container.appendChild(fragment);
 
                 // Apply highlighting
                 hljs.highlightAll();
