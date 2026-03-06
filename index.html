@@ -592,6 +592,72 @@
         <div id="progressText">0%</div>
     </div>
 
+    <!-- App Info Popup -->
+    <div class="popup-overlay" id="appInfoPopupOverlay">
+        <div class="popup-content" style="max-width: 450px;">
+            <div class="popup-header">
+                <span>ℹ️ About SH Preview</span>
+                <button class="icon-btn" onclick="toggleAppInfoPopup()"
+                    style="width: 32px; height: 32px; font-size: 16px;">✕</button>
+            </div>
+            <div class="popup-body">
+                <div class="popup-section">
+                    <h3>🎯 What is SH Preview?</h3>
+                    <p style="color: #cccccc; line-height: 1.6; margin-bottom: 15px;">
+                        A powerful tool for viewing, sharing, and collaborating on shell scripts with built-in comments
+                        and
+                        AI assistance.
+                    </p>
+                </div>
+
+                <div class="popup-section">
+                    <h3>✨ Key Features</h3>
+                    <ul style="color: #cccccc; list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px;">✓ <strong>Script Viewer</strong> - Load any .sh script via URL
+                        </li>
+                        <li style="margin-bottom: 10px;">✓ <strong>Comments System</strong> - Discuss scripts with
+                            Artalk
+                        </li>
+                        <li style="margin-bottom: 10px;">✓ <strong>AI Assistant</strong> - Get help and apply diffs</li>
+                        <li style="margin-bottom: 10px;">✓ <strong>Deploy Options</strong> - One-click cloud deployment
+                        </li>
+                        <li style="margin-bottom: 10px;">✓ <strong>Dark Mode</strong> - Easy on the eyes</li>
+                    </ul>
+                </div>
+
+                <div class="popup-section">
+                    <h3>🔧 How to Use</h3>
+                    <div
+                        style="background: #1e1e1e; padding: 12px; border-radius: 8px; color: #ce9178; font-family: monospace; margin-bottom: 10px;">
+                        ?url=https://example.com/script.sh
+                    </div>
+                    <p style="color: #cccccc;">Add <code
+                            style="background: #2d2d30; padding: 2px 6px; border-radius: 4px;">&e=1</code> to enable
+                        experimental features</p>
+                </div>
+
+                <div class="popup-section">
+                    <h3>📚 Links</h3>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <a href="https://github.com/igiteam/sh" target="_blank" class="deploy-btn"
+                            style="text-decoration: none; margin: 0; flex: 1;">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="https://buymeacoffee.com/igiteam" target="_blank" class="deploy-btn"
+                            style="text-decoration: none; margin: 0; flex: 1; background: #FFDD00; color: #000;">
+                            <i class="fas fa-mug-hot"></i> Donate
+                        </a>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 10px;">
+                    <i class="fas fa-heart" style="color: #ff6b6b;"></i>
+                    <strong>Version 1.0</strong> - Made with ❤️ by IGITeam
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Popup Overlay -->
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup-content">
@@ -743,6 +809,7 @@
             infoBtn.style.display = 'none';
         }
 
+
         if (enablePanel) {
             initializePanel();
         } else {
@@ -891,6 +958,39 @@
                 showToast('📋 Command copied to clipboard');
             });
         }
+
+        // App Info Popup functions
+        function toggleAppInfoPopup() {
+            const infoPopup = document.getElementById('appInfoPopupOverlay');
+            if (infoPopup.classList.contains('active')) {
+                infoPopup.classList.remove('active');
+                appInfoBtn.classList.remove('active');
+            } else {
+                infoPopup.classList.add('active');
+                appInfoBtn.classList.add('active');
+            }
+        }
+
+        // Add event listener for app info button
+        document.getElementById('appInfoBtn').addEventListener('click', toggleAppInfoPopup);
+
+        // Close popup when clicking overlay
+        document.getElementById('appInfoPopupOverlay').addEventListener('click', function (e) {
+            if (e.target === this) {
+                toggleAppInfoPopup();
+            }
+        });
+
+        // Close popup with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const infoPopup = document.getElementById('appInfoPopupOverlay');
+                if (infoPopup.classList.contains('active')) {
+                    toggleAppInfoPopup();
+                }
+            }
+        });
+
 
         function deployDigitalOcean() {
             doInfo.style.display = 'block';
