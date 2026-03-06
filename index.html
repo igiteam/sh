@@ -51,25 +51,64 @@
         .line-content {
             flex: 1;
             white-space: pre;
-            color: #d4d4d4;
         }
 
-        code {
-            font-family: inherit;
-            display: inline;
-            padding: 0;
-            white-space: pre;
-            background: transparent !important;
-        }
-
+        /* Fix for highlighting - these are critical */
         .hljs {
-            padding: 0 !important;
-            margin: 0 !important;
+            display: inline !important;
             background: transparent !important;
-            display: inline;
+            padding: 0 !important;
+            color: #d4d4d4 !important;
         }
 
-        /* Hidden download button - only appears if showDownload=1 */
+        .hljs-keyword {
+            color: #569cd6 !important;
+        }
+
+        .hljs-built_in {
+            color: #4ec9b0 !important;
+        }
+
+        .hljs-type {
+            color: #4ec9b0 !important;
+        }
+
+        .hljs-literal {
+            color: #569cd6 !important;
+        }
+
+        .hljs-number {
+            color: #b5cea8 !important;
+        }
+
+        .hljs-string {
+            color: #ce9178 !important;
+        }
+
+        .hljs-comment {
+            color: #6a9955 !important;
+        }
+
+        .hljs-function {
+            color: #dcdcaa !important;
+        }
+
+        .hljs-title {
+            color: #dcdcaa !important;
+        }
+
+        .hljs-params {
+            color: #9cdcfe !important;
+        }
+
+        .hljs-variable {
+            color: #9cdcfe !important;
+        }
+
+        .hljs-operator {
+            color: #d4d4d4 !important;
+        }
+
         .download-btn {
             position: fixed;
             bottom: 20px;
@@ -98,7 +137,6 @@
 <body>
     <div id="script-container"></div>
 
-    <!-- Hidden download button (only shows when showDownload=1) -->
     <button id="downloadBtn" class="download-btn" onclick="downloadScript()">⬇️ Download .sh</button>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
@@ -106,18 +144,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
 
     <script>
-        // Parse URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const scriptUrl = urlParams.get('url') || 'https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh';
-        const showDownload = urlParams.get('download') === '1'; // Hidden unless &download=1
+        const showDownload = urlParams.get('download') === '1';
 
-        // Show download button if requested
         if (showDownload) {
             document.getElementById('downloadBtn').classList.add('visible');
         }
 
         function downloadScript() {
-            // Get current displayed script content without line numbers
             const lines = document.querySelectorAll('.script-line');
             let scriptContent = '';
 
@@ -136,7 +171,6 @@
             URL.revokeObjectURL(url);
         }
 
-        // Load and display script
         fetch(scriptUrl)
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -146,21 +180,17 @@
                 const container = document.getElementById('script-container');
                 container.innerHTML = '';
 
-                // Split into lines
                 const lines = data.replace(/\r\n/g, '\n').split('\n');
 
-                // Create lines with numbers
                 lines.forEach((line, index) => {
                     const lineDiv = document.createElement('div');
                     lineDiv.className = 'script-line';
 
-                    // Line number
                     const lineNum = document.createElement('span');
                     lineNum.className = 'line-number';
                     lineNum.textContent = (index + 1).toString();
                     lineDiv.appendChild(lineNum);
 
-                    // Line content with syntax highlighting
                     const contentSpan = document.createElement('span');
                     contentSpan.className = 'line-content';
 
@@ -173,8 +203,10 @@
                     container.appendChild(lineDiv);
                 });
 
-                // Apply highlighting
-                hljs.highlightAll();
+                // Force highlight.js to process
+                document.querySelectorAll('pre code, code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
             })
             .catch(error => {
                 document.getElementById('script-container').innerHTML =
