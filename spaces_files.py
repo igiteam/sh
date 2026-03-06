@@ -921,10 +921,6 @@ def generate_html_grid(scripts, settings):
                             ></iframe>
                         </div>
                         <div class="script-content">
-                            <div class="script-title">
-                                <a href="${{script.url}}" target="_blank">${{script.name}}</a>
-                                <span class="script-extension">.sh</span>
-                            </div>
                             <div class="script-title" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                 <a href="${{script.preview_url}}" target="_blank" style="flex: 0 1 auto;">{script['name']}</a>
                                 <a href="${{script.edit_url}}" target="_blank" style="flex: 0 1 auto;">
