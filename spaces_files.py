@@ -22,8 +22,10 @@ load_dotenv()
 
 # Default configuration
 DEFAULT_USERNAME = "igiteam"
-DEFAULT_AVATAR = "https://github.com/igiteam.png"
-DEFAULT_GITHUB_URL = "https://igiteam.github.io/"
+# DEFAULT_AVATAR = "https://github.com/igiteam.png"
+# DEFAULT_GITHUB_URL = "https://igiteam.github.io/"
+DEFAULT_AVATAR = "https://cdn.sdappnet.cloud/rtx/images/bash.png"
+DEFAULT_GITHUB_URL = "https://github.com/igiteam/sh"
 OUTPUT_FILE = 'index.html'
 OUTPUT_DIRECTORY = 'public'
 SH_PREVIEW_URL = "https://igiteam.github.io/sh"
@@ -569,7 +571,6 @@ def generate_html_grid(scripts, settings):
             width: 100%;
             height: 100%;
             border: none;
-            pointer-events: none; /* Prevents iframe interaction, keeps scrolling */
         }}
         
         .script-content {{
