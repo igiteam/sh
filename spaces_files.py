@@ -806,7 +806,7 @@ def generate_html_grid(scripts, settings):
                 </select>
 
                 <!-- Upload button -->
-                <button class="upload-btn" id="uploadBtn" title="Upload new script" style="background: transparent; border: 1px solid var(--github-primary); border-radius: 6px; padding: 10px 16px; cursor: pointer; color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                <button class="upload-btn" id="uploadBtn" title="Upload new script" style="background: transparent; border: 1px solid var(--github-border); border-radius: 6px; padding: 10px 16px; cursor: pointer; color: white; font-size: 20px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
                 ⬆️
                 </button>
             </div>
