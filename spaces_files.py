@@ -1026,7 +1026,7 @@ def main():
         
         # Ask if user wants to open the file
         response = input(f"\n{Colors.BOLD}Open HTML file in browser? (y/n): {Colors.END}").lower()
-        if response != '' or response == 'y':
+        if response == 'y':
             file_path = os.path.join(OUTPUT_DIRECTORY, OUTPUT_FILE)
             webbrowser.open(f"file://{os.path.abspath(file_path)}")
     

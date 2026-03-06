@@ -102,6 +102,7 @@
             display: none;
         }
 
+
         #comments {
             width: 100%;
             height: 100%;
@@ -154,13 +155,6 @@
             background: #0e639c;
             color: white;
             border-color: #1177bb;
-        }
-
-        /* Play button - green when active */
-        .icon-btn.play-active {
-            background: #2ea043;
-            color: white;
-            border-color: #3fb950;
         }
 
         /* Right panel - AI Assistant */
@@ -336,185 +330,6 @@
             transition: width 0.2s;
         }
 
-        /* Popup Overlay */
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .popup-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .popup-content {
-            background: #252526;
-            border: 1px solid #3e3e42;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .popup-overlay.active .popup-content {
-            transform: scale(1);
-        }
-
-        .popup-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #3e3e42;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #ffffff;
-            font-weight: 600;
-            font-size: 18px;
-            background: #1e1e1e;
-            border-radius: 12px 12px 0 0;
-        }
-
-        .popup-body {
-            padding: 24px 20px;
-        }
-
-        .popup-section {
-            margin-bottom: 24px;
-        }
-
-        .popup-section h3 {
-            color: #9cdcfe;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-        }
-
-        .deploy-command {
-            background: #1e1e1e;
-            border: 1px solid #3e3e42;
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 13px;
-            color: #ce9178;
-            margin-bottom: 12px;
-            word-break: break-all;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .deploy-command code {
-            flex: 1;
-            color: #ce9178;
-        }
-
-        .deploy-command .copy-btn {
-            background: #2d2d30;
-            border: 1px solid #3e3e42;
-            border-radius: 4px;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: #cccccc;
-            font-size: 16px;
-            transition: all 0.2s;
-        }
-
-        .deploy-command .copy-btn:hover {
-            background: #3e3e42;
-            color: #ffffff;
-        }
-
-        .deploy-options {
-            display: flex;
-            gap: 8px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .deploy-btn {
-            flex: 1;
-            min-width: 120px;
-            background: #0e639c;
-            color: white;
-            border: none;
-            padding: 12px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .deploy-btn:hover {
-            background: #1177bb;
-            transform: translateY(-1px);
-        }
-
-        .deploy-btn.digitalocean {
-            background: #0080ff;
-        }
-
-        .deploy-btn.digitalocean:hover {
-            background: #0066cc;
-        }
-
-        .deploy-btn.aws {
-            background: #ff9900;
-            color: #000;
-        }
-
-        .deploy-btn.aws:hover {
-            background: #ffad33;
-        }
-
-        .info-box {
-            background: #1e1e1e;
-            border-left: 3px solid #9cdcfe;
-            padding: 12px 16px;
-            border-radius: 4px;
-            margin-top: 16px;
-            color: #cccccc;
-            font-size: 13px;
-        }
-
-        .info-box code {
-            background: #2d2d30;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #ce9178;
-        }
-
-        .info-box i {
-            color: #9cdcfe;
-            margin-right: 8px;
-        }
-
         /* iPhone SE optimization */
         @media only screen and (max-width: 375px) and (max-height: 667px) {
             .icon-btn {
@@ -530,15 +345,6 @@
 
             .panel {
                 width: 100vw;
-            }
-
-            .popup-content {
-                width: 95%;
-                max-height: 90vh;
-            }
-
-            .deploy-options {
-                flex-direction: column;
             }
         }
     </style>
@@ -578,7 +384,6 @@
         </a>
         <button class="icon-btn" id="downloadBtn" title="Download script">⬇️</button>
         <button class="icon-btn" id="copyBtn" title="Copy with line numbers">📋</button>
-        <button class="icon-btn" id="playBtn" title="Deploy options">▶️</button>
         <button class="icon-btn" id="togglePanelBtn" title="Toggle AI panel">🤖</button>
     </div>
 
@@ -590,74 +395,6 @@
         <div id="progressText">0%</div>
     </div>
 
-    <!-- Popup Overlay -->
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup-content">
-            <div class="popup-header">
-                <span>🚀 Deploy Options</span>
-                <button class="icon-btn" onclick="togglePopup()"
-                    style="width: 32px; height: 32px; font-size: 16px;">✕</button>
-            </div>
-            <div class="popup-body">
-                <!-- Quick Terminal Command -->
-                <div class="popup-section">
-                    <h3>📋 Quick Terminal Command</h3>
-                    <div class="deploy-command">
-                        <code
-                            id="quickCommand">curl -o netlify-init.sh https://cdn.sdappnet.cloud/rtx/netlify-init.sh && chmod +x netlify-init.sh && sudo ./netlify-init.sh</code>
-                        <div class="copy-btn" onclick="copyQuickCommand()" title="Copy command">📋</div>
-                    </div>
-                </div>
-
-                <!-- Deployment Options -->
-                <div class="popup-section">
-                    <h3>☁️ Deploy to Cloud</h3>
-                    <div class="deploy-options">
-                        <button class="deploy-btn digitalocean" onclick="deployDigitalOcean()">
-                            <i class="fas fa-cloud"></i> DigitalOcean Droplet
-                        </button>
-                        <button class="deploy-btn" onclick="deployNetlify()">
-                            <i class="fas fa-globe"></i> Netlify
-                        </button>
-                    </div>
-
-                    <!-- DigitalOcean Python Script Info -->
-                    <div class="info-box" id="doInfo" style="display: none;">
-                        <i class="fas fa-info-circle"></i>
-                        <strong>DigitalOcean Droplet Creator</strong><br>
-                        <p style="margin-top: 8px;">This will create a droplet with:</p>
-                        <ul style="margin-left: 20px; margin-top: 4px;">
-                            <li>Ubuntu 24.04</li>
-                            <li>1 vCPU, 1GB RAM</li>
-                            <li>Password: <code>FuckYou11!!a</code></li>
-                            <li>Subdomain: <code id="subdomainDisplay">wine.sdappnet.cloud</code></li>
-                        </ul>
-                        <p style="margin-top: 12px;">The Python script will:</p>
-                        <ol style="margin-left: 20px; margin-top: 4px;">
-                            <li>Create droplet with random ID</li>
-                            <li>Set up DNS A record</li>
-                            <li>Open terminal in browser</li>
-                        </ol>
-                        <button class="deploy-btn digitalocean" onclick="runDigitalOceanScript()"
-                            style="margin-top: 16px; width: 100%;">
-                            <i class="fas fa-play"></i> Run Droplet Creator
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Info about deployment -->
-                <div class="info-box">
-                    <i class="fas fa-lightbulb"></i>
-                    <strong>Quick Deploy Tips:</strong>
-                    <ul style="margin-left: 20px; margin-top: 4px;">
-                        <li>Use the terminal command for any Linux/Unix system</li>
-                        <li>DigitalOcean option creates a fresh VM with this script</li>
-                        <li>Netlify option is for static site deployment</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Highlight.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
@@ -667,9 +404,6 @@
     <!-- Artalk -->
     <link href="https://unpkg.com/artalk@2.8.6/dist/Artalk.css" rel="stylesheet">
     <script src="https://unpkg.com/artalk@2.8.6/dist/Artalk.js"></script>
-
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -688,15 +422,7 @@
         const progressText = document.getElementById('progressText');
         const commentsContainer = document.getElementById('commentsContainer');
         const toggleCommentsBtn = document.getElementById('toggleCommentsBtn');
-        const playBtn = document.getElementById('playBtn');
-        const popupOverlay = document.getElementById('popupOverlay');
         const resizer = document.getElementById('resizer');
-        const doInfo = document.getElementById('doInfo');
-        const subdomainDisplay = document.getElementById('subdomainDisplay');
-
-        // Set subdomain based on current script or default
-        const scriptName = scriptUrl.split('/').pop().replace('.sh', '');
-        subdomainDisplay.textContent = `${scriptName}.sdappnet.cloud`;
 
         // Resizer variables
         let isResizing = false;
@@ -706,13 +432,6 @@
         // Show comments button if &e=1 is present OR if we're on the main domain without any script
         if (currentUrl.includes('&e=1') || currentUrl.includes('?e=1') || !urlParams.has('url')) {
             toggleCommentsBtn.style.display = 'flex';
-        }
-
-        // Show play button only if there's a script URL
-        if (urlParams.has('url')) {
-            playBtn.style.display = 'flex';
-        } else {
-            playBtn.style.display = 'none';
         }
 
         if (enablePanel) {
@@ -824,57 +543,6 @@
                 panel.classList.add('hidden');
                 toggleBtn.classList.remove('active');
             }
-        }
-
-        // Popup functions
-        function togglePopup() {
-            if (popupOverlay.classList.contains('active')) {
-                popupOverlay.classList.remove('active');
-                playBtn.classList.remove('play-active');
-            } else {
-                popupOverlay.classList.add('active');
-                playBtn.classList.add('play-active');
-            }
-        }
-
-        function copyQuickCommand() {
-            const command = document.getElementById('quickCommand').textContent;
-            navigator.clipboard.writeText(command).then(() => {
-                showToast('📋 Command copied to clipboard');
-            });
-        }
-
-        function deployDigitalOcean() {
-            doInfo.style.display = 'block';
-            // Scroll to the info
-            doInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        function deployNetlify() {
-            showToast('🌐 Netlify deployment coming soon!');
-        }
-
-        function runDigitalOceanScript() {
-            // This would typically open a new tab with the Python script or trigger a backend
-            showToast('🚀 Opening DigitalOcean droplet creator...');
-
-            // For now, we'll create a simulated terminal experience
-            const scriptContent = `# DigitalOcean Droplet Creator
-# This will create a droplet with:
-# - Ubuntu 24.04
-# - 1 vCPU, 1GB RAM
-# - Password: FuckYou11!!a
-# - Subdomain: ${scriptName}.sdappnet.cloud
-
-# The Python script would run here...
-# For demo purposes, opening DigitalOcean console:
-window.open('https://cloud.digitalocean.com/droplets/new', '_blank');`;
-
-            // Execute in a new tab (simulated)
-            setTimeout(() => {
-                window.open('https://cloud.digitalocean.com/droplets/new', '_blank');
-                showToast('✅ Opened DigitalOcean console');
-            }, 1000);
         }
 
         function copyScript() {
@@ -1142,14 +810,6 @@ The diff will be automatically applied by SH Preview.`;
         document.getElementById('copyBtn').addEventListener('click', copyScript);
         document.getElementById('togglePanelBtn').addEventListener('click', togglePanel);
         toggleCommentsBtn.addEventListener('click', toggleComments);
-        playBtn.addEventListener('click', togglePopup);
-
-        // Close popup when clicking overlay (but not content)
-        popupOverlay.addEventListener('click', function (e) {
-            if (e.target === popupOverlay) {
-                togglePopup();
-            }
-        });
 
         // Start loading
         loadScript();
