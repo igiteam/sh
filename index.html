@@ -186,7 +186,7 @@
         }
 
         .panel-header {
-            padding: 20px 16px;
+            padding: 10px;
             border-bottom: 1px solid #3e3e42;
             display: flex;
             justify-content: space-between;
@@ -444,8 +444,8 @@
         let startY = 0;
         let startHeight = 0;
 
-        // Show comments button only if &e=1 is present
-        if (currentUrl.includes('&e=1') || currentUrl.includes('?e=1')) {
+        // Show comments button if &e=1 is present OR if we're on the main domain without any script
+        if (currentUrl.includes('&e=1') || currentUrl.includes('?e=1') || !urlParams.has('url')) {
             toggleCommentsBtn.style.display = 'flex';
         }
 
