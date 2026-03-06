@@ -14,6 +14,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <style>
+        /* [All your existing CSS remains exactly the same] */
         * {
             margin: 0;
             padding: 0;
@@ -603,8 +604,7 @@
                 <div class="popup-section">
                     <h3>📋 Quick Terminal Command</h3>
                     <div class="deploy-command">
-                        <code
-                            id="quickCommand">curl -o netlify-init.sh https://cdn.sdappnet.cloud/rtx/netlify-init.sh && chmod +x netlify-init.sh && sudo ./netlify-init.sh</code>
+                        <code id="quickCommand"></code>
                         <div class="copy-btn" onclick="copyQuickCommand()" title="Copy command">📋</div>
                     </div>
                 </div>
@@ -629,8 +629,8 @@
                         <ul style="margin-left: 20px; margin-top: 4px;">
                             <li>Ubuntu 24.04</li>
                             <li>1 vCPU, 1GB RAM</li>
-                            <li>Password: <code>FuckYou11!!a</code></li>
-                            <li>Subdomain: <code id="subdomainDisplay">wine.sdappnet.cloud</code></li>
+                            <li>Password: <code id="passwordDisplay">FuckYou11!!a</code></li>
+                            <li>Subdomain: <code id="subdomainDisplay"></code></li>
                         </ul>
                         <p style="margin-top: 12px;">The Python script will:</p>
                         <ol style="margin-left: 20px; margin-top: 4px;">
@@ -673,7 +673,7 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const scriptUrl = urlParams.get('url') || 'https://cdn.sdappnet.cloud/rtx/winejs_js.sh';
+        const scriptUrl = urlParams.get('url') || '';
         const enablePanel = urlParams.get('e') === '1' || !urlParams.has('url');
         const currentUrl = window.location.href;
 
@@ -693,10 +693,26 @@
         const resizer = document.getElementById('resizer');
         const doInfo = document.getElementById('doInfo');
         const subdomainDisplay = document.getElementById('subdomainDisplay');
+        const quickCommand = document.getElementById('quickCommand');
+        const passwordDisplay = document.getElementById('passwordDisplay');
 
-        // Set subdomain based on current script or default
-        const scriptName = scriptUrl.split('/').pop().replace('.sh', '');
+        // Set subdomain and command based on current script
+        let scriptName = 'script';
+        if (scriptUrl) {
+            const urlParts = scriptUrl.split('/');
+            const fullName = urlParts.pop() || 'script.sh';
+            scriptName = fullName.replace('.sh', '');
+        }
+
+        // Update displays
         subdomainDisplay.textContent = `${scriptName}.sdappnet.cloud`;
+
+        // Set quick command
+        if (scriptUrl) {
+            quickCommand.textContent = `curl -o "${scriptName}.sh" "${scriptUrl}" && chmod +x "${scriptName}.sh" && sudo ./"${scriptName}.sh"`;
+        } else {
+            quickCommand.textContent = '# No script selected';
+        }
 
         // Resizer variables
         let isResizing = false;
@@ -709,7 +725,7 @@
         }
 
         // Show play button only if there's a script URL
-        if (currentUrl.includes('&e=1') || currentUrl.includes('?e=1') || !urlParams.has('url')) {
+        if (scriptUrl) {
             playBtn.style.display = 'flex';
         } else {
             playBtn.style.display = 'none';
@@ -838,7 +854,7 @@
         }
 
         function copyQuickCommand() {
-            const command = document.getElementById('quickCommand').textContent;
+            const command = quickCommand.textContent;
             navigator.clipboard.writeText(command).then(() => {
                 showToast('📋 Command copied to clipboard');
             });
@@ -855,22 +871,9 @@
         }
 
         function runDigitalOceanScript() {
-            // This would typically open a new tab with the Python script or trigger a backend
             showToast('🚀 Opening DigitalOcean droplet creator...');
 
-            // For now, we'll create a simulated terminal experience
-            const scriptContent = `# DigitalOcean Droplet Creator
-# This will create a droplet with:
-# - Ubuntu 24.04
-# - 1 vCPU, 1GB RAM
-# - Password: FuckYou11!!a
-# - Subdomain: ${scriptName}.sdappnet.cloud
-
-# The Python script would run here...
-# For demo purposes, opening DigitalOcean console:
-window.open('https://cloud.digitalocean.com/droplets/new', '_blank');`;
-
-            // Execute in a new tab (simulated)
+            // For demo, open DigitalOcean console
             setTimeout(() => {
                 window.open('https://cloud.digitalocean.com/droplets/new', '_blank');
                 showToast('✅ Opened DigitalOcean console');
@@ -1002,6 +1005,12 @@ window.open('https://cloud.digitalocean.com/droplets/new', '_blank');`;
         }
 
         async function loadScript() {
+            if (!scriptUrl) {
+                document.getElementById('script-container').innerHTML =
+                    '<div style="color: #888; padding: 40px; text-align: center;">🔍 No script selected. Add ?url= to view a script.</div>';
+                return;
+            }
+
             try {
                 const response = await fetch(scriptUrl);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -1141,8 +1150,8 @@ The diff will be automatically applied by SH Preview.`;
         document.getElementById('downloadBtn').addEventListener('click', downloadScript);
         document.getElementById('copyBtn').addEventListener('click', copyScript);
         document.getElementById('togglePanelBtn').addEventListener('click', togglePanel);
-        toggleCommentsBtn.addEventListener('click', toggleComments);
-        playBtn.addEventListener('click', togglePopup);
+        if (toggleCommentsBtn) toggleCommentsBtn.addEventListener('click', toggleComments);
+        if (playBtn) playBtn.addEventListener('click', togglePopup);
 
         // Close popup when clicking overlay (but not content)
         popupOverlay.addEventListener('click', function (e) {
