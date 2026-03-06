@@ -725,7 +725,7 @@
         }
 
         // Show play button only if there's a script URL
-        if (scriptUrl) {
+        if (currentUrl.includes('&e=1') || currentUrl.includes('?e=1') || !urlParams.has('url')) {
             playBtn.style.display = 'flex';
         } else {
             playBtn.style.display = 'none';
