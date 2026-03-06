@@ -37,26 +37,65 @@
             position: relative;
         }
 
-        #script-container {
+        /* Main content area - vertical split */
+        .content-area {
             flex: 1;
+            display: flex;
+            flex-direction: column;
             height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #script-container {
+            flex: 1 1 auto;
+            min-height: 100px;
             overflow: auto;
             background: #1e1e1e;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Comments container */
-        #commentsContainer {
-            width: 400px;
-            height: 100vh;
+        /* Resizer */
+        .resizer {
+            height: 8px;
             background: #252526;
-            border-left: 1px solid #3e3e42;
+            border-top: 1px solid #3e3e42;
+            border-bottom: 1px solid #3e3e42;
+            cursor: row-resize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6e7681;
+            font-size: 12px;
+            user-select: none;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+
+        .resizer:hover {
+            background: #2d2d30;
+        }
+
+        .resizer:active {
+            background: #3e3e42;
+        }
+
+        .resizer i {
+            font-size: 12px;
+            transform: rotate(90deg);
+        }
+
+        /* Comments container - bottom */
+        #commentsContainer {
+            flex: 0 0 300px;
+            min-height: 100px;
+            max-height: 80vh;
+            background: #252526;
+            border-top: 1px solid #3e3e42;
             display: flex;
             flex-direction: column;
-            position: relative;
-            z-index: 90;
-            animation: slideIn 0.2s ease;
-            color: #ffffff;
+            overflow: hidden;
+            transition: flex 0.1s ease;
         }
 
         #commentsContainer.hidden {
@@ -64,14 +103,15 @@
         }
 
         .comments-header {
-            padding: 20px 16px;
+            padding: 12px 16px;
             border-bottom: 1px solid #3e3e42;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: #ffffff;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 14px;
+            background: #1e1e1e;
         }
 
         #comments {
@@ -312,10 +352,6 @@
                 height: 24px !important;
             }
 
-            #commentsContainer {
-                width: 100vw;
-            }
-
             .panel {
                 width: 100vw;
             }
@@ -325,18 +361,27 @@
 
 <body>
     <div class="main-wrapper">
-        <!-- Main content area with script and comments -->
-        <div style="display: flex; flex: 1; overflow: hidden;">
-            <div id="script-container" style="flex: 1;"></div>
+        <!-- Main content area with vertical split -->
+        <div class="content-area">
+            <div id="script-container"></div>
+
+            <!-- Draggable Resizer -->
+            <div class="resizer" id="resizer" title="Drag to resize">
+                <span>⋮⋮⋮</span>
+            </div>
+
+            <!-- Comments Container (Bottom) -->
             <div id="commentsContainer" class="hidden">
                 <div class="comments-header">
                     <span>💬 Comments</span>
                     <button class="icon-btn" onclick="toggleComments()"
-                        style="width: 36px; height: 36px; background: #3e3e42;">✕</button>
+                        style="width: 32px; height: 32px; font-size: 16px; background: #3e3e42;">✕</button>
                 </div>
                 <div id="comments"></div>
             </div>
         </div>
+
+        <!-- Right Panel (AI Assistant) -->
         <div id="rightPanel" class="panel hidden"></div>
     </div>
 
@@ -377,8 +422,8 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const scriptUrl = urlParams.get('url') || 'https://cdn.sdappnet.cloud/rtx/wine/urlpixelprint.sh';
-        const enablePanel = urlParams.get('e') === '1';
+        const scriptUrl = urlParams.get('url') || 'https://cdn.sdappnet.cloud/rtx/winejs_js.sh';
+        const enablePanel = urlParams.get('e') === '1' || !urlParams.has('url');
         const currentUrl = window.location.href;
 
         let currentLineCount = 0;
@@ -392,6 +437,12 @@
         const progressText = document.getElementById('progressText');
         const commentsContainer = document.getElementById('commentsContainer');
         const toggleCommentsBtn = document.getElementById('toggleCommentsBtn');
+        const resizer = document.getElementById('resizer');
+
+        // Resizer variables
+        let isResizing = false;
+        let startY = 0;
+        let startHeight = 0;
 
         // Show comments button only if &e=1 is present
         if (currentUrl.includes('&e=1') || currentUrl.includes('?e=1')) {
@@ -402,6 +453,47 @@
             initializePanel();
         } else {
             document.getElementById('togglePanelBtn').style.display = 'none';
+        }
+
+        // Resizer functionality
+        resizer.addEventListener('mousedown', initResize);
+        resizer.addEventListener('touchstart', initResize);
+
+        function initResize(e) {
+            e.preventDefault();
+            isResizing = true;
+            startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+            startHeight = commentsContainer.offsetHeight;
+
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('touchmove', resize);
+            document.addEventListener('mouseup', stopResize);
+            document.addEventListener('touchend', stopResize);
+
+            // Add cursor style
+            document.body.style.cursor = 'row-resize';
+        }
+
+        function resize(e) {
+            if (!isResizing) return;
+
+            const currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+            const deltaY = startY - currentY; // Invert so dragging down increases height
+            const newHeight = Math.min(
+                Math.max(startHeight + deltaY, 100),
+                window.innerHeight * 0.8
+            );
+
+            commentsContainer.style.flex = `0 0 ${newHeight}px`;
+        }
+
+        function stopResize() {
+            isResizing = false;
+            document.removeEventListener('mousemove', resize);
+            document.removeEventListener('touchmove', resize);
+            document.removeEventListener('mouseup', stopResize);
+            document.removeEventListener('touchend', stopResize);
+            document.body.style.cursor = '';
         }
 
         function toggleComments() {
@@ -420,21 +512,19 @@
         }
 
         function initArtalk() {
-            {
-                const pageKey = window.location.href;
-                artalkInstance = Artalk.init({
-                    el: '#comments',
-                    pageKey: pageKey,
-                    pageTitle: document.title || 'SH Script',
-                    server: 'https://artalk.sdappnet.cloud',
-                    site: 'SH Preview',
-                    placeholder: 'Leave a comment...',
-                    noComment: 'No comments yet',
-                    sendBtn: 'Send',
-                    darkMode: true,
-                    height: 'auto'
-                });
-            }
+            const pageKey = window.location.href;
+            artalkInstance = Artalk.init({
+                el: '#comments',
+                pageKey: pageKey,
+                pageTitle: document.title || 'SH Script',
+                server: 'https://artalk.sdappnet.cloud',
+                site: 'SH Preview',
+                placeholder: 'Leave a comment...',
+                noComment: 'No comments yet',
+                sendBtn: 'Send',
+                darkMode: true,
+                height: 'auto'
+            });
         }
 
         function initializePanel() {
