@@ -407,7 +407,7 @@
                 <input type="text" class="search-input" placeholder="Find a script..." id="scriptSearch">
                 
                 <!-- File size filter dropdown -->
-                <select class="size-filter" id="sizeFilter">
+                <select class="size-filter" id="sizeFilter" style="background-color: var(--github-bg); border: 1px solid var(--github-border); border-radius: 6px; padding: 8px 12px; color: var(--github-text); font-size: 13px; cursor: pointer; min-width: 120px; outline: none;">
                     <option value="all">All sizes</option>
                     <option value="100KB">&lt; 100 KB</option>
                     <option value="500KB">&lt; 500 KB</option>
@@ -415,11 +415,11 @@
                     <option value="5MB">&lt; 5 MB</option>
                     <option value="10MB">&lt; 10 MB</option>
                 </select>
-                
+
                 <!-- Upload button -->
-                <button class="upload-btn" id="uploadBtn" title="Upload new script">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span>Upload</span>
+                <button class="upload-btn" id="uploadBtn" title="Upload new script" style="background: var(--github-primary); border: 1px solid var(--github-primary); border-radius: 6px; padding: 10px 16px; cursor: pointer; color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(9, 105, 218, 0.2);">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 16px;"></i>
+                    <span style="display: inline-block;">Upload</span>
                 </button>
             </div>
         </div>
@@ -1792,7 +1792,7 @@
         <!-- Footer -->
         <div class="footer">
             <p>📜 SH Scripts from DigitalOcean Spaces | CDN: https://cdn.sdappnet.cloud</p>
-            <p>Generated on 2026-03-06 21:30:14</p>
+            <p>Generated on 2026-03-06 21:33:38</p>
             <div class="cdn-info">
                 <i class="fas fa-bolt"></i> Files are cached for 1 hour. Use Purge button to instantly update.
             </div>
@@ -1983,6 +1983,13 @@
             filterScripts(e.target.value, sizeFilter);
         });
         
+        // Auto-apply 1MB filter on page load
+        window.addEventListener('load', () => {
+            // Set dropdown to 1MB (it's already selected by default)
+            // Trigger filter to apply the 1MB limit
+            filterScripts('', '1MB');
+        });
+
     </script>
 </body>
 </html>
