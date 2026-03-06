@@ -568,6 +568,7 @@
 
     <!-- Floating icon toolbar -->
     <div class="icon-toolbar">
+        <button class="icon-btn" id="infoBtn" title="Information" style="display: none;">ℹ️</button>
         <button class="icon-btn" id="toggleCommentsBtn" title="Toggle comments" style="display: none;">💬</button>
         <a href="https://shbash.netlify.app" target="_blank" class="icon-btn">
             <img src="https://cdn.sdappnet.cloud/rtx/images/bash.png" alt="ShBash"
@@ -580,7 +581,7 @@
         <button class="icon-btn" id="downloadBtn" title="Download script">⬇️</button>
         <button class="icon-btn" id="copyBtn" title="Copy with line numbers">📋</button>
         <button class="icon-btn" id="playBtn" title="Deploy options">▶️</button>
-        <button class="icon-btn" id="togglePanelBtn" title="Toggle AI panel">🤖</button>
+        <button class="icon-btn" id="togglePanelBtn" title="Toggle Ai Diff+-">🤖</button>
     </div>
 
     <div id="loadingIndicator" class="loading-progress" style="display: none;">
@@ -732,6 +733,14 @@
             playBtn.style.display = 'flex';
         } else {
             playBtn.style.display = 'none';
+        }
+
+        // Info button visibility
+        const infoBtn = document.getElementById('infoBtn');
+        if (currentUrl.includes('&e=1') || currentUrl.includes('?e=1') || !urlParams.has('url')) {
+            infoBtn.style.display = 'flex';
+        } else {
+            infoBtn.style.display = 'none';
         }
 
         if (enablePanel) {
