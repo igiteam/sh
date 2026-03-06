@@ -377,6 +377,14 @@ def generate_html_grid(scripts, settings):
                             <i class="fas fa-clock" style="width: 16px; color: var(--github-text-secondary);"></i>
                             <span>Modified: {script['last_modified'][:10]}</span>
                         </div>
+                        <script>
+                        Artalk.init({
+                        el:      '#Comments',
+                        site:    'Artalk Blog',
+                        server:  'https://artalk.sdappnet.cloud',
+                        pageKey: '{script['edit_url']}'
+                        })
+                        </sccript>
                     </div>
                 </div>
             </div>
