@@ -736,6 +736,7 @@ def generate_html_grid(scripts, settings):
             }}
         }}
         
+        
         /* Floating buttons */
         .floating-buttons {{
             position: fixed;
@@ -793,6 +794,22 @@ def generate_html_grid(scripts, settings):
             
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="Find a script..." id="scriptSearch">
+                
+                <!-- File size filter dropdown -->
+                <select class="size-filter" id="sizeFilter">
+                    <option value="all">All sizes</option>
+                    <option value="100KB">&lt; 100 KB</option>
+                    <option value="500KB">&lt; 500 KB</option>
+                    <option value="1MB" selected>&lt; 1 MB</option>
+                    <option value="5MB">&lt; 5 MB</option>
+                    <option value="10MB">&lt; 10 MB</option>
+                </select>
+                
+                <!-- Upload button -->
+                <button class="upload-btn" id="uploadBtn" title="Upload new script">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Upload</span>
+                </button>
             </div>
         </div>
         
@@ -833,27 +850,47 @@ def generate_html_grid(scripts, settings):
         const scriptsData = {scripts_json};
         const cdnEndpoint = {json.dumps(settings.get('cdn_endpoint'))};
         
-        // Search functionality
-        function filterScripts(query) {{
+        // File size filter
+        document.getElementById('sizeFilter').addEventListener('change', (e) => {{
+            const sizeLimit = e.target.value;
+            const searchQuery = document.getElementById('scriptSearch').value;
+            filterScripts(searchQuery, sizeLimit);
+        }});
+
+        // Modified filter function to handle both search and size
+        function filterScripts(query, sizeLimit = 'all') {{
             const container = document.getElementById('scriptsContainer');
             const scriptCount = document.getElementById('scriptCount');
             
-            if (!query.trim()) {{
-                renderScripts(scriptsData);
-                scriptCount.textContent = `${{scriptsData.length}} script${{scriptsData.length > 1 ? 's' : ''}}`;
-                return;
+            let filtered = scriptsData;
+            
+            // Apply search filter
+            if (query.trim()) {{
+                filtered = filtered.filter(script => 
+                    script.name.toLowerCase().includes(query.toLowerCase()) ||
+                    script.path.toLowerCase().includes(query.toLowerCase())
+                );
             }}
             
-            const filtered = scriptsData.filter(script => 
-                script.name.toLowerCase().includes(query.toLowerCase()) ||
-                script.path.toLowerCase().includes(query.toLowerCase())
-            );
+            // Apply size filter
+            if (sizeLimit !== 'all') {{
+                const limitBytes = {{
+                    '100KB': 100 * 1024,
+                    '500KB': 500 * 1024,
+                    '1MB': 1024 * 1024,
+                    '5MB': 5 * 1024 * 1024,
+                    '10MB': 10 * 1024 * 1024
+                }}[sizeLimit];
+                
+                filtered = filtered.filter(script => script.size <= limitBytes);
+            }}
             
             if (filtered.length === 0) {{
                 container.innerHTML = `
                     <div class="no-results">
                         <i class="fas fa-search"></i>
-                        <p>No scripts found matching "${{query}}"</p>
+                        <p>No scripts found matching your criteria</p>
+                        ${{sizeLimit !== 'all' ? '<p style="font-size: 12px; margin-top: 8px;">Try increasing the file size limit</p>' : ''}}
                     </div>
                 `;
             }} else {{
@@ -862,6 +899,12 @@ def generate_html_grid(scripts, settings):
             
             scriptCount.textContent = `${{filtered.length}} script${{filtered.length > 1 ? 's' : ''}}`;
         }}
+
+        // Upload button click handler
+        document.getElementById('uploadBtn').addEventListener('click', () => {{
+            showToast('📤 Upload feature coming soon!');
+            // Here you'll implement the actual upload functionality later
+        }});
         
         function renderScripts(scripts) {{
             const container = document.getElementById('scriptsContainer');
@@ -965,7 +1008,8 @@ def generate_html_grid(scripts, settings):
         
         // Setup search
         document.getElementById('scriptSearch').addEventListener('input', (e) => {{
-            filterScripts(e.target.value);
+            const sizeFilter = document.getElementById('sizeFilter').value;
+            filterScripts(e.target.value, sizeFilter);
         }});
         
     </script>
