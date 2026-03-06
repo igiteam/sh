@@ -960,31 +960,20 @@
         }
 
         // App Info Popup functions
-        // App Info Popup functions
         function toggleAppInfoPopup() {
             const infoPopup = document.getElementById('appInfoPopupOverlay');
-            const infoBtn = document.getElementById('infoBtn'); // Add this line
+            const infoBtn = document.getElementById('infoBtn');
             if (infoPopup.classList.contains('active')) {
                 infoPopup.classList.remove('active');
-                infoBtn.classList.remove('active'); // Fix: use infoBtn
+                infoBtn.classList.remove('active');
             } else {
                 infoPopup.classList.add('active');
-                infoBtn.classList.add('active'); // Fix: use infoBtn
+                infoBtn.classList.add('active');
             }
         }
 
-        // Add event listener for app info button - FIX THIS
-        document.getElementById('infoBtn').addEventListener('click', toggleAppInfoPopup); // Change to infoBtn
-
-        // Close popup when clicking overlay
-        document.getElementById('appInfoPopupOverlay').addEventListener('click', function (e) {
-            if (e.target === this) {
-                toggleAppInfoPopup();
-            }
-        });
-
         // Add event listener for app info button
-        document.getElementById('appInfoBtn').addEventListener('click', toggleAppInfoPopup);
+        document.getElementById('infoBtn').addEventListener('click', toggleAppInfoPopup);
 
         // Close popup when clicking overlay
         document.getElementById('appInfoPopupOverlay').addEventListener('click', function (e) {
@@ -1002,7 +991,6 @@
                 }
             }
         });
-
 
         function deployDigitalOcean() {
             doInfo.style.display = 'block';
