@@ -704,6 +704,9 @@
             scriptName = fullName.replace('.sh', '');
         }
 
+        // Set dynamic page title
+        document.title = scriptUrl ? `${scriptName}.sh` : 'SH Preview';
+
         // Update displays
         subdomainDisplay.textContent = `${scriptName}.yourdomain.com`;
 
