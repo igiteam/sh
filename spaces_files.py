@@ -304,6 +304,7 @@ def list_sh_scripts(client, settings):
                             'path': key,
                             'url': public_url,
                             'preview_url': f"{SH_PREVIEW_URL}?url={public_url}",
+                            'edit_url': f"{SH_PREVIEW_URL}?url={public_url}&e=1",
                             'size': obj['Size'],
                             'last_modified': obj['LastModified'].isoformat(),
                             'etag': obj['ETag'].strip('"')
@@ -353,9 +354,12 @@ def generate_html_grid(scripts, settings):
                     ></iframe>
                 </div>
                 <div class="script-content">
-                    <div class="script-title">
-                        <a href="{script['url']}" target="_blank">{script['name']}</a>
-                        <span class="script-extension">.sh</span>
+                    <div class="script-title" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <a href="{script['preview_url']}" target="_blank" style="flex: 0 1 auto;">{script['name']}</a>
+                        <span class="script-extension" style="flex: 0 0 auto;">.sh</span>
+                        <a href="{script['preview_url']}" target="_blank" class="action-btn primary" style="flex: 0 0 auto; margin-left: auto;">
+                            <i class="fas fa-code"></i> Preview
+                        </a>
                     </div>
                     
                     <div class="script-details">
@@ -371,15 +375,6 @@ def generate_html_grid(scripts, settings):
                             <i class="fas fa-clock" style="width: 16px; color: var(--github-text-secondary);"></i>
                             <span>Modified: {script['last_modified'][:10]}</span>
                         </div>
-                    </div>
-                    
-                    <div class="script-actions">
-                        <a href="{script['url']}" target="_blank" class="action-btn">
-                            <i class="fas fa-download"></i> Raw
-                        </a>
-                        <a href="{script['preview_url']}" target="_blank" class="action-btn primary">
-                            <i class="fas fa-code"></i> Preview
-                        </a>
                     </div>
                 </div>
             </div>
