@@ -357,8 +357,8 @@ def generate_html_grid(scripts, settings):
                     <div class="script-title" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         <a href="{script['preview_url']}" target="_blank" style="flex: 0 1 auto;">{script['name']}</a>
                         <span class="script-extension" style="flex: 0 0 auto;">.sh</span>
-                        <a href="{script['preview_url']}" target="_blank" class="action-btn primary" style="flex: 0 0 auto; margin-left: auto;">
-                            <i class="fas fa-code"></i> Preview
+                        <a href="{script['preview_url']}" target="_blank" style="flex: 0 1 auto;">
+                            <i class="fas fa-code"></i>
                         </a>
                     </div>
                     
