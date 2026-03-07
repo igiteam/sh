@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>ShBash with Comments</title>
+    <title>Sh with Comments</title>
 
     <link rel="icon" href="https://cdn.sdappnet.cloud/rtx/images/bash.png" type="image/png">
     <link rel="apple-touch-icon" href="https://cdn.sdappnet.cloud/rtx/images/bash.png" sizes="180x180">
@@ -596,13 +596,13 @@
     <div class="popup-overlay" id="appInfoPopupOverlay">
         <div class="popup-content" style="max-width: 450px;">
             <div class="popup-header">
-                <span>ℹ️ About ShBash</span>
+                <span>ℹ️ About Sh</span>
                 <button class="icon-btn" onclick="toggleAppInfoPopup()"
                     style="width: 32px; height: 32px; font-size: 16px;">✕</button>
             </div>
             <div class="popup-body">
                 <div class="popup-section">
-                    <h3>🎯 What is ShBash?</h3>
+                    <h3>🎯 What is Sh?</h3>
                     <p style="color: #cccccc; line-height: 1.6; margin-bottom: 15px;">
                         A powerful tool for viewing, sharing, and collaborating on shell scripts with built-in comments
                         and
@@ -776,7 +776,7 @@
         }
 
         // Set dynamic page title
-        document.title = !urlParams.has('url') ? 'ShBash' : `${scriptName}.sh`;
+        document.title = !urlParams.has('url') ? 'Sh' : `${scriptName}.sh`;
 
         // Update displays
         subdomainDisplay.textContent = `${scriptName}.yourdomain.com`;
@@ -883,7 +883,7 @@
                 pageKey: pageKey,
                 pageTitle: document.title || 'SH Script',
                 server: 'https://artalk.sdappnet.cloud',
-                site: 'ShBash',
+                site: 'Sh',
                 placeholder: 'Leave a comment...',
                 noComment: 'No comments yet',
                 sendBtn: 'Send',
@@ -1027,8 +1027,8 @@
                 scriptText += `${lineNum.textContent.trim()} ${codeEl ? codeEl.textContent : lineContent.textContent}\n`;
             });
 
-            scriptText += `\n\n# === ShBash AUTO INSTRUCTION ===
-# This script was viewed in ShBash (https://igiteam.github.io/sh)
+            scriptText += `\n\n# === Sh AUTO INSTRUCTION ===
+# This script was viewed in Sh (https://igiteam.github.io/sh)
 # When asking AI to modify this script:
 # 1. Share only the DIFF (unified format) of changes needed
 # 2. Include line numbers from the original
@@ -1041,7 +1041,7 @@
 # +New line after
 # -Line to remove
 # 
-# This allows the ShBash tool to automatically apply your changes!`;
+# This allows the Sh tool to automatically apply your changes!`;
 
             navigator.clipboard.writeText(scriptText).then(() => {
                 showToast('📋 Copied + AI instructions');
@@ -1224,7 +1224,7 @@ Include line numbers from the original.
 Original script has ${currentLineCount} lines.
 
 When you respond, ONLY output the diff in unified format.
-The diff will be automatically applied by ShBash.`;
+The diff will be automatically applied by Sh.`;
                 }
             }
 
