@@ -1148,7 +1148,13 @@
             }
 
             try {
-                const response = await fetch(scriptUrl);
+                // Add cache buster to URL
+                const cacheBuster = `&_=${Date.now()}`;
+                const urlWithCache = scriptUrl.includes('?')
+                    ? `${scriptUrl}${cacheBuster}`
+                    : `${scriptUrl}?${cacheBuster}`;
+
+                const response = await fetch(urlWithCache);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const contentLength = response.headers.get('content-length');
