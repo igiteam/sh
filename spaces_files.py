@@ -31,6 +31,8 @@ OUTPUT_FILE = 'index.html'
 OUTPUT_DIRECTORY = 'public'
 SH_PREVIEW_URL = "https://igiteam.github.io/sh"
 CDN_PURGE_ENDPOINT = "https://api.digitalocean.com/v2/cdn/endpoints"
+SUPPORT_URL = "https://buymeacoffee.com/igiteam"
+SH_GITHUB_URL = "https://github.com/igiteam/sh"
 
 # Color codes for terminal output
 class Colors:
@@ -830,12 +832,12 @@ def generate_html_grid(scripts, settings):
     <!-- Floating Buttons -->
     <div class="floating-buttons">
         <div class="float-btn">
-            <a href="https://github.com/{settings['username']}" target="_blank">
+            <a href="{SH_GITHUB_URL}" target="_blank">
                 <img src="https://cdn.sdappnet.cloud/rtx/images/github-icon.png" alt="GitHub">
             </a>
         </div>
         <div class="float-btn">
-            <a href="https://buymeacoffee.com/{settings['username']}" target="_blank">
+            <a href="{SUPPORT_URL}" target="_blank">
                 <img src="https://studio.buymeacoffee.com/assets/img/bmc-meta-new/new/apple-icon-120x120.png" alt="Buy Me a Coffee">
             </a>
         </div>
