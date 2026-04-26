@@ -753,16 +753,11 @@ def generate_html_grid(scripts, settings):
         .float-btn {{
             width: 60px;
             height: 60px;
-            border-radius: 50%;
-            background: rgba(30, 30, 40, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }}
         
         .float-btn:hover {{
