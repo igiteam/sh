@@ -827,7 +827,7 @@ def generate_html_grid(scripts, settings):
     <div class="floating-buttons">
         <div class="float-btn">
             <a href="{SH_TERMINAL_URL}" target="_blank">
-                <img src="https://cdn.gitgpt.chat/rtx/images/sh_terminal.png" alt="GitHub">
+                <img src="https://cdn.gitgpt.chat/rtx/images/sh_terminal.png" alt="Sh Terminal">
             </a>
         </div>
         <div class="float-btn">
