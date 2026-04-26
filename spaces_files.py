@@ -33,7 +33,7 @@ SH_PREVIEW_URL = "https://igiteam.github.io/sh"
 CDN_PURGE_ENDPOINT = "https://api.digitalocean.com/v2/cdn/endpoints"
 SUPPORT_URL = "https://buymeacoffee.com/igiteam"
 SH_GITHUB_URL = "https://github.com/igiteam/sh"
-SH_TERMINAL_URL = "https://igiteam.github.io/sh_terminal/?url1=https%3A%2F%2Figiteam.github.io%2Fsh%2F%3Furl%3Dhttps%253A%252F%252Fcdn.gitgpt.chat%252Frtx%252Fwinejs-welcome.sh%26_%3D1777237421476&url2=https%3A%2F%2Figiteam.github.io%2Fsh%2F%3Furl%3Dhttps%253A%252F%252Fcdn.gitgpt.chat%252Frtx%252Fwinejs-welcome.sh%26_%3D1777237421477&url3=https%3A%2F%2Figiteam.github.io%2Fsh%2F%3Furl%3Dhttps%253A%252F%252Fcdn.gitgpt.chat%252Frtx%252Fwinejs-welcome.sh%26_%3D1777237421477&url4=https%3A%2F%2Figiteam.github.io%2Fsh%2F%3Furl%3Dhttps%253A%252F%252Fcdn.gitgpt.chat%252Frtx%252Fwinejs-welcome.sh%26_%3D1777237421478
+SH_TERMINAL_URL = "https://igiteam.github.io/sh_terminal"
 
 # Color codes for terminal output
 class Colors:
