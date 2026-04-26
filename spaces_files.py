@@ -25,7 +25,7 @@ DEFAULT_USERNAME = "https://shbash.netlify.app/"
 # DEFAULT_USERNAME = "igiteam"
 # DEFAULT_AVATAR = "https://github.com/igiteam.png"
 # DEFAULT_GITHUB_URL = "https://igiteam.github.io/"
-DEFAULT_AVATAR = "https://cdn.sdappnet.cloud/rtx/images/bash.png"
+DEFAULT_AVATAR = "https://cdn.gitgpt.chat/rtx/images/bash.png"
 DEFAULT_GITHUB_URL = "https://github.com/igiteam/sh"
 OUTPUT_FILE = 'index.html'
 OUTPUT_DIRECTORY = 'public'
@@ -120,7 +120,7 @@ def show_settings_menu():
     
     cdn_endpoint = os.getenv('DO_CDN_ENDPOINT', '')
     if not cdn_endpoint:
-        cdn_endpoint_input = input("Enter CDN Endpoint URL (e.g., https://cdn.sdappnet.cloud) [optional]: ").strip()
+        cdn_endpoint_input = input("Enter CDN Endpoint URL (e.g., https://cdn.gitgpt.chat) [optional]: ").strip()
         if cdn_endpoint_input:
             cdn_endpoint = cdn_endpoint_input
     else:
@@ -833,7 +833,7 @@ def generate_html_grid(scripts, settings):
     <div class="floating-buttons">
         <div class="float-btn">
             <a href="{SH_GITHUB_URL}" target="_blank">
-                <img src="https://cdn.sdappnet.cloud/rtx/images/github-icon.png" alt="GitHub">
+                <img src="https://cdn.gitgpt.chat/rtx/images/github-icon.png" alt="GitHub">
             </a>
         </div>
         <div class="float-btn">
