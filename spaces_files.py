@@ -767,7 +767,6 @@ def generate_html_grid(scripts, settings):
         .float-btn img {{
             width: 30px;
             height: 30px;
-            border-radius: 50%;
         }}
     </style>
 </head>
