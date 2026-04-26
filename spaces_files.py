@@ -33,6 +33,7 @@ SH_PREVIEW_URL = "https://igiteam.github.io/sh"
 CDN_PURGE_ENDPOINT = "https://api.digitalocean.com/v2/cdn/endpoints"
 SUPPORT_URL = "https://buymeacoffee.com/igiteam"
 SH_GITHUB_URL = "https://github.com/igiteam/sh"
+SH_TERMINAL_URL = "https://igiteam.github.io/sh_terminal"
 
 # Color codes for terminal output
 class Colors:
@@ -394,8 +395,7 @@ def generate_html_grid(scripts, settings):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{settings['username']}'s SH Scripts</title>
-    
+    <title>ShBash Scripts Collection</title>
     <link rel="icon" href="{settings['avatar']}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{settings['avatar']}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -826,6 +826,11 @@ def generate_html_grid(scripts, settings):
     
     <!-- Floating Buttons -->
     <div class="floating-buttons">
+        <div class="float-btn">
+            <a href="{SH_TERMINAL_URL}" target="_blank">
+                <img src="https://cdn.gitgpt.chat/rtx/images/sh_terminal.png" alt="GitHub">
+            </a>
+        </div>
         <div class="float-btn">
             <a href="{SH_GITHUB_URL}" target="_blank">
                 <img src="https://cdn.gitgpt.chat/rtx/images/github-icon.png" alt="GitHub">
